@@ -1,0 +1,28 @@
+<div class="grid-container">
+  <h1 class="mat-h1" style="text-align: center;">{{this.selectedChannel}}</h1>
+  <mat-grid-list cols="2" rowHeight="5:1">
+    <mat-grid-tile style="background-color: #303030;">
+      <mat-grid-tile-header style="justify-content: center;">Invert Phase</mat-grid-tile-header>
+      <mat-slide-toggle [checked]="this.invertPhase" (toggleChange)="updateInvertPhase()"></mat-slide-toggle>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-grid-tile-header style="justify-content: center;">Stereo Group</mat-grid-tile-header>
+      <mat-slide-toggle [checked]="this.stereoGroup" (toggleChange)="updateStereoGroup()"></mat-slide-toggle>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-grid-tile-header style="justify-content: center;">Gain: {{this.gain}} dB</mat-grid-tile-header>
+      <mat-slider [max]="20" [min]="-20" discrete="" style="width:100%;">
+        <input matSliderThumb [(ngModel)]="gain" (valueChange)="updateGain()" #slider>
+      </mat-slider>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-grid-tile-header style="justify-content: center;">Channel Color</mat-grid-tile-header>
+
+      <div style="display: flex; flex-direction: row;">
+        <ngx-colors ngx-colors-trigger [(ngModel)]="color" style="margin: 10px;"></ngx-colors>
+        <button mat-raised-button (click)="updateColor()" style="margin: 10px;" color="primary">Update</button>
+      </div>
+
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

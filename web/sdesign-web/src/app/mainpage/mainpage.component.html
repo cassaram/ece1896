@@ -22,7 +22,7 @@
         </button>
         <!-- <span>sdesign-web</span> -->
         <div style="display: flex; justify-content: center; text-justify: center;">
-          <div>text</div>
+          <h1>{{this.showName}}</h1>
         </div>
 
       </mat-toolbar>
@@ -30,9 +30,7 @@
       <div style="flex-grow: 1;">
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="height: 100%;">
           <mat-tab label="Input">
-            <div style="height: 100%;">
-              Content
-            </div>
+            <app-input-page [backendWs]="backendWs"></app-input-page>
           </mat-tab>
           <mat-tab label="EQ">EQ Content</mat-tab>
           <mat-tab label="Compressor">Compressor Content</mat-tab>

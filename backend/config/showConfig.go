@@ -6,11 +6,12 @@ import (
 )
 
 type ShowConfig struct {
-	Name           string               `json:"name"`
-	FileName       string               `json:"filename"`
-	ChannelCfgs    []ChannelConfig      `json:"channel_cfgs"`
-	BusCfgs        []BusConfig          `json:"bus_cfgs"`
-	CrosspointCfgs [][]CrosspointConfig `json:"crosspoint_cfgs"`
+	Name            string               `json:"name"`
+	FileName        string               `json:"filename"`
+	SelectedChannel uint64               `json:"selected_channel"`
+	ChannelCfgs     []ChannelConfig      `json:"channel_cfgs"`
+	BusCfgs         []BusConfig          `json:"bus_cfgs"`
+	CrosspointCfgs  [][]CrosspointConfig `json:"crosspoint_cfgs"`
 }
 
 func NewShowConfig(name string, filename string, channels uint64, busses uint64) *ShowConfig {
@@ -40,6 +41,8 @@ func (c *ShowConfig) GetValue(path []string) (string, error) {
 		return c.Name, nil
 	case "filename":
 		return c.FileName, nil
+	case "selected_channel":
+		return strconv.FormatUint(c.SelectedChannel, 10), nil
 	case "channel_cfgs":
 		id, err := strconv.Atoi(path[1])
 		if err != nil {
@@ -74,6 +77,13 @@ func (c *ShowConfig) SetValue(path []string, value string) error {
 		return nil
 	case "filename":
 		c.FileName = value
+		return nil
+	case "selected_channel":
+		val, err := strconv.ParseUint(value, 10, 64)
+		if err != nil {
+			return err
+		}
+		c.SelectedChannel = val
 		return nil
 	case "channel_cfgs":
 		id, err := strconv.Atoi(path[1])

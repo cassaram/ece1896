@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -23,7 +24,7 @@ type Core struct {
 	stop          chan bool
 	rxChannel     chan api.Command
 	clients       map[uuid.UUID]*api.Client
-	clientsMute   *sync.Mutex
+	clientsMute   sync.Mutex
 	httpServer    *http.Server
 	serveMux      http.ServeMux
 }
@@ -36,7 +37,6 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 		stop:          make(chan bool),
 		rxChannel:     make(chan api.Command),
 		clients:       make(map[uuid.UUID]*api.Client),
-		clientsMute:   &sync.Mutex{},
 	}
 
 	// Setup serve mux
@@ -159,8 +159,7 @@ func (c *Core) handleMessage(msg api.Command) {
 }
 
 func (c *Core) notifyClients(msg api.Request) {
-	c.clientsMute.Lock()
-	defer c.clientsMute.Unlock()
+	fmt.Printf("Notifying clients of: %v\n", msg)
 
 	for id, cl := range c.clients {
 		if !cl.Active {

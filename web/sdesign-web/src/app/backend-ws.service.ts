@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShowConfig } from './models/showConfig';
+import { SetShowConfigValue, ShowConfig } from './models/showConfig';
 import { Observable, Observer, Subject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { APICommandMethod, APIRequest } from './models/api';
@@ -10,6 +10,7 @@ import { APICommandMethod, APIRequest } from './models/api';
 export class BackendWsService {
   private socket$: WebSocketSubject<any>;
   private ShowConfig = new Subject<ShowConfig>;
+  private ShowConfig_Cache: ShowConfig;
   public ShowConfig$ = this.ShowConfig.asObservable();
 
   constructor() {
@@ -26,13 +27,17 @@ export class BackendWsService {
   private handleResponse(response: APIRequest) {
     if (response.method == APICommandMethod.SHOW_LOAD) {
       // Parse json
-      this.ShowConfig.next(JSON.parse(response.data));
+      this.ShowConfig_Cache = JSON.parse(response.data);
+      this.ShowConfig.next(this.ShowConfig_Cache);
+    }
+    if (response.method == APICommandMethod.SHOW_SET) {
+      let cfg = SetShowConfigValue(this.ShowConfig_Cache, response.path.split("."), response.data)
+      this.ShowConfig_Cache = cfg;
+      this.ShowConfig.next(this.ShowConfig_Cache);
     }
   }
 
-  public Subscribe(): void {
-  }
-
-  public Disconnect(): void {
+  public SendRequest(request: APIRequest): void {
+    this.socket$.next(request);
   }
 }

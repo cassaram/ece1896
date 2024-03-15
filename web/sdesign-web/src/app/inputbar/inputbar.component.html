@@ -1,9 +1,11 @@
 <div class="mat-grid-list">
-  <mat-grid-list cols="{{channels.length}}" rowHeight="100px">
+  <mat-grid-list cols="{{channels.length}}" rowHeight="75">
     @for (channel of channels; track $index) {
-      <mat-grid-tile [style.background]="channel.color">
-        <h2>{{ channel.name }}</h2>
-      </mat-grid-tile>
+      <button (click)="this.setSelectedIdx($index);">
+        <mat-grid-tile [style.background]="channel.color">
+          <h2 style="color: white;">{{ channel.name }}</h2>
+        </mat-grid-tile>
+      </button>
     }
   </mat-grid-list>
 </div>

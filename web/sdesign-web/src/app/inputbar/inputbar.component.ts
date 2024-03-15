@@ -1,15 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { ChannelConfig } from '../models/channelConfig';
 import { BackendWsService } from '../backend-ws.service';
 import { ShowConfig } from '../models/showConfig';
+import { Subject } from 'rxjs';
+import { APICommandMethod, APIRequest } from '../models/api';
 
 @Component({
   selector: 'app-inputbar',
@@ -17,12 +12,7 @@ import { ShowConfig } from '../models/showConfig';
   styleUrl: './inputbar.component.scss',
   standalone: true,
   imports: [
-    AsyncPipe,
     MatGridListModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule
   ]
 })
 export class InputbarComponent implements OnInit {
@@ -41,6 +31,14 @@ export class InputbarComponent implements OnInit {
 
   private updateChannels(showConfig: ShowConfig): void {
     this.channels = showConfig.channel_cfgs;
-    console.log(this.channels);
+  }
+
+  public setSelectedIdx(idx: number): void {
+    var request: APIRequest = {
+      "method": APICommandMethod.SHOW_SET,
+      "path": "selected_channel",
+      "data": String(idx)
+    };
+    this.backendWs.SendRequest(request);
   }
 }
