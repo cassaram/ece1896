@@ -2,6 +2,7 @@
 
 SET GOOS=linux
 SET GOARCH=arm
+SET GOARM=7
 go build -o "bin\linux_arm"
 
 SET GOOS=linux

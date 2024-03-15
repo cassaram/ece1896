@@ -1,0 +1,47 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="'navigation'"
+      [mode]="'side'"
+      [opened]="false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="#">Link 1</a>
+      <a mat-list-item href="#">Link 2</a>
+      <a mat-list-item href="#">Link 3</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content style="height: 100%;">
+    <div style="display:flex; flex-direction:column; position: absolute; top: 0; bottom: 0; width: 100%;">
+      <mat-toolbar color="primary">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <!-- <span>sdesign-web</span> -->
+        <div style="display: flex; justify-content: center; text-justify: center;">
+          <div>text</div>
+        </div>
+
+      </mat-toolbar>
+      <!-- Add Content Here -->
+      <div style="flex-grow: 1;">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="height: 100%;">
+          <mat-tab label="Input">
+            <div style="height: 100%;">
+              Content
+            </div>
+          </mat-tab>
+          <mat-tab label="EQ">EQ Content</mat-tab>
+          <mat-tab label="Compressor">Compressor Content</mat-tab>
+          <mat-tab label="Gate">Gate Content</mat-tab>
+        </mat-tab-group>
+      </div>
+      <div style="bottom: 0;">
+        <app-inputbar [backendWs]="backendWs"></app-inputbar>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

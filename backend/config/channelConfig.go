@@ -8,6 +8,7 @@ import (
 type ChannelConfig struct {
 	Name          string           `json:"name"`
 	ID            uint64           `json:"id"`
+	Color         string           `json:"color"`
 	InputCfg      InputConfig      `json:"input_cfg"`
 	EQCfg         EQConfig         `json:"eq_cfg"`
 	CompressorCfg CompressorConfig `json:"compressor_cfg"`
@@ -18,6 +19,7 @@ func NewChannelConfig(id uint64) *ChannelConfig {
 	c := ChannelConfig{
 		Name:          fmt.Sprintf("Channel %d", id+1),
 		ID:            id,
+		Color:         "#F6F",
 		InputCfg:      *NewInputConfig(),
 		EQCfg:         *NewEQConfig(),
 		CompressorCfg: *NewCompressorConfig(),
@@ -32,6 +34,8 @@ func (c *ChannelConfig) GetValue(path []string) (string, error) {
 		return c.Name, nil
 	case "id":
 		return strconv.FormatUint(c.ID, 10), nil
+	case "color":
+		return c.Color, nil
 	case "input_cfg":
 		return c.InputCfg.GetValue(path[1:])
 	case "eq_cfg":
@@ -49,6 +53,9 @@ func (c *ChannelConfig) SetValue(path []string, value string) error {
 	switch path[0] {
 	case "name":
 		c.Name = value
+		return nil
+	case "color":
+		c.Color = value
 		return nil
 	case "input_cfg":
 		return c.InputCfg.SetValue(path[1:], value)

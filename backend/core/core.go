@@ -40,7 +40,7 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 	}
 
 	// Setup serve mux
-	c.serveMux.HandleFunc("/api/v1/connect/", c.apiV1Handler)
+	c.serveMux.HandleFunc("/api/v1/ws", c.apiV1Handler)
 	c.httpServer = &http.Server{
 		Handler:      &c,
 		ReadTimeout:  time.Second * 10,
@@ -77,8 +77,11 @@ func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Core) apiV1Handler(w http.ResponseWriter, r *http.Request) {
-	conn, err := websocket.Accept(w, r, nil)
+	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
+		InsecureSkipVerify: true,
+	})
 	if err != nil {
+		c.logFile.Println(err)
 		return
 	}
 	client := api.NewClient(conn, uuid.New(), c.rxChannel, c.logFile)
