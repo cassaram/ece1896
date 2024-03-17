@@ -27,13 +27,22 @@
 
       </mat-toolbar>
       <!-- Add Content Here -->
+      <button (click)="openDialog()" [style.backgroundColor]="this.channelColor" style="border-color: transparent; border: 0">
+        <mat-card style="background-color: transparent;">
+          <h1 class="mat-h1" style="color: white;">{{ this.channelName }}</h1>
+        </mat-card>
+      </button>
       <div style="flex-grow: 1;">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="height: 100%;">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" color="accent" style="height: 100%;">
           <mat-tab label="Input">
             <app-input-page [backendWs]="backendWs"></app-input-page>
           </mat-tab>
-          <mat-tab label="EQ">EQ Content</mat-tab>
-          <mat-tab label="Compressor">Compressor Content</mat-tab>
+          <mat-tab label="EQ">
+            <app-eq-page [backendWs]="backendWs"></app-eq-page>
+          </mat-tab>
+          <mat-tab label="Compressor">
+            <app-compressor-page [backendWs]="backendWs"></app-compressor-page>
+          </mat-tab>
           <mat-tab label="Gate">Gate Content</mat-tab>
         </mat-tab-group>
       </div>

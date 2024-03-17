@@ -8,12 +8,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { InputbarComponent } from '../inputbar/inputbar.component';
 import { InputPageComponent } from '../input-page/input-page.component';
 import { BackendWsService } from '../backend-ws.service';
 import { ShowConfig } from '../models/showConfig';
+import { EqPageComponent } from '../eq-page/eq-page.component';
+import { ChannelDialogComponent } from '../channel-dialog/channel-dialog.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { CompressorPageComponent } from '../compressor-page/compressor-page.component';
 
 
 @Component({
@@ -29,9 +35,14 @@ import { ShowConfig } from '../models/showConfig';
     MatListModule,
     MatIconModule,
     MatTabsModule,
+    MatDialogModule,
+    MatCardModule,
     AsyncPipe,
     InputbarComponent,
     InputPageComponent,
+    EqPageComponent,
+    ChannelDialogComponent,
+    CompressorPageComponent
   ]
 })
 export class MainpageComponent implements OnInit {
@@ -39,14 +50,36 @@ export class MainpageComponent implements OnInit {
   backendWs: BackendWsService;
 
   public showName: string = "";
+  public selectedChannel: number = 0;
+  public channelName: string = "";
+  public channelColor: string = "";
+  //public dialog: MatDialog;
+
+  constructor(public dialog: MatDialog) {
+
+  }
 
   ngOnInit(): void {
       this.backendWs.ShowConfig$.subscribe({
-        next: cfg => this.updateShowName(cfg)
+        next: cfg => this.updateFromCfg(cfg)
       });
   }
 
-  private updateShowName(cfg: ShowConfig): void {
+  public openDialog() {
+    const dialogRef = this.dialog.open(ChannelDialogComponent, {
+      data: {
+        backendWs: this.backendWs,
+        selectedChannel: this.selectedChannel,
+        channelName: this.channelName,
+        channelColor: this.channelColor,
+      },
+    });
+  }
+
+  private updateFromCfg(cfg: ShowConfig): void {
     this.showName = cfg.name;
+    this.selectedChannel = cfg.selected_channel;
+    this.channelName = cfg.channel_cfgs[this.selectedChannel].name;
+    this.channelColor = cfg.channel_cfgs[this.selectedChannel].color;
   }
 }

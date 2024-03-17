@@ -1,0 +1,94 @@
+<div class="grid-container">
+  <div class="grid-item" style="grid-column: 1/4;">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>EQ Settings</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Bypass</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="eqBypass" (toggleChange)="updateEQBypass()"/>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>High Pass</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Enable</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="highPassEnable" (toggleChange)="updateHighPassEnable()"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Gain: {{this.highPassGain}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider max="24" min="-24" step="0.5" class="gain-slider">
+                <input matSliderThumb [(ngModel)]="highPassGain" (valueChange)="updateHighPassGain()">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Mid</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Enable</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="midEnable" (toggleChange)="updateMidEnable()"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Gain: {{this.midGain}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider max="24" min="-24" step="0.5" class="gain-slider">
+                <input matSliderThumb [(ngModel)]="midGain" (valueChange)="updateMidGain()">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Low Pass</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Enable</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="lowPassEnable" (toggleChange)="updateLowPassEnable()"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Gain {{this.lowPassGain}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider max="24" min="-24" step="0.5" class="gain-slider">
+                <input matSliderThumb [(ngModel)]="lowPassGain" (valueChange)="updateLowPassGain()">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

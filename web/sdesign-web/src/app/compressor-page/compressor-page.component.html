@@ -1,0 +1,100 @@
+<div class="grid-container">
+  <div class="grid-item" style="grid-column: 1/4;">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Compressor Settings</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Bypass</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.bypass" (toggleChange)="updateBypass(!this.bypass)"/>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Gain</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Pre-Gain: {{this.preGain}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="-24" max="24" step="0.5" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.preGain" (valueChange)="this.updatePreGain(this.preGain)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Post-Gain: {{this.postGain}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="-24" max="24" step="0.5" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.postGain" (valueChange)="this.updatePostGain(this.postGain)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Timing</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Attack: {{this.attackTime}} ms</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="0" max="200" step="1" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.attackTime" (valueChange)="this.updateAttackTime(this.attackTime)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Release: {{this.releaseTime}} ms</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="0" max="1000" step="5" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.releaseTime" (valueChange)="this.updateReleaseTime(this.releaseTime)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Parameters</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Threshold: {{this.threshold}} dB</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="-60" max="0" step="1" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.threshold" (valueChange)="this.updateThreshold(this.threshold)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="height: fit-content;">
+            <span matListItemTitle>Ratio: {{this.ratio}}:1</span>
+            <span matListItemLine style="height: fit-content;">
+              <mat-slider min="1" max="50" step="0.5" class="value-slider">
+                <input matSliderThumb [(ngModel)]="this.ratio" (valueChange)="this.updateRatio(this.ratio)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

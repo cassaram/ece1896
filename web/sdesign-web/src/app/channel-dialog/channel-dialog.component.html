@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Channel Settings</h2>
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item style="height: fit-content;">
+      <span matListItemLine style="height: fit-content;">
+        <mat-form-field>
+          <mat-label>Channel {{this.selectedChannel + 1}} Name</mat-label>
+          <input matInput placeholder="{{this.channelName}}" [(ngModel)]="this.channelName">
+        </mat-form-field>
+      </span>
+    </mat-list-item>
+    <mat-list-item style="height: fit-content;">
+      <span matListItemTitle>Channel Color</span>
+      <span matListItemLine style="height: fit-content;">
+        <ngx-colors ngx-colors-trigger [(ngModel)]="channelColor"></ngx-colors>
+      </span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="this.applySettings()">Apply</button>
+</mat-dialog-actions>

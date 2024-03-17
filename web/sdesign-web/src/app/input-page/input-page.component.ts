@@ -7,7 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { BackendWsService } from '../backend-ws.service';
 import { ShowConfig } from '../models/showConfig';
 import { APICommandMethod, APIRequest } from '../models/api';
-import { NgxColorsModule } from 'ngx-colors';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-input-page',
@@ -19,8 +20,9 @@ import { NgxColorsModule } from 'ngx-colors';
     MatSliderModule,
     MatGridListModule,
     FormsModule,
-    NgxColorsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCardModule,
+    MatListModule
   ]
 })
 export class InputPageComponent implements OnInit {
@@ -28,11 +30,9 @@ export class InputPageComponent implements OnInit {
   backendWs: BackendWsService;
 
   private selectedChannelIdx: number = 0;
-  public selectedChannel: string = "";
   public invertPhase: Boolean = false;
   public stereoGroup: Boolean = false;
   public gain: number = 0;
-  public color: string = "#FFFFFF";
 
   ngOnInit(): void {
       this.backendWs.ShowConfig$.subscribe({
@@ -42,11 +42,9 @@ export class InputPageComponent implements OnInit {
 
   private updateFromCfg(cfg: ShowConfig): void {
     this.selectedChannelIdx = cfg.selected_channel;
-    this.selectedChannel = cfg.channel_cfgs[this.selectedChannelIdx].name;
     this.invertPhase = cfg.channel_cfgs[this.selectedChannelIdx].input_cfg.invert_phase;
     this.stereoGroup = cfg.channel_cfgs[this.selectedChannelIdx].input_cfg.stereo_group;
     this.gain = cfg.channel_cfgs[this.selectedChannelIdx].input_cfg.gain;
-    this.color = cfg.channel_cfgs[this.selectedChannelIdx].color;
   }
 
   public updateInvertPhase(): void {
@@ -72,15 +70,6 @@ export class InputPageComponent implements OnInit {
       "method": APICommandMethod.SHOW_SET,
       "path": "channel_cfgs.".concat(String(this.selectedChannelIdx).concat(".input_cfg.gain")),
       "data": String(this.gain)
-    }
-    this.backendWs.SendRequest(request);
-  }
-
-  public updateColor(): void {
-    let request: APIRequest = {
-      "method": APICommandMethod.SHOW_SET,
-      "path": "channel_cfgs.".concat(String(this.selectedChannelIdx).concat(".color")),
-      "data": this.color
     }
     this.backendWs.SendRequest(request);
   }
