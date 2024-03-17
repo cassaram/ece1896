@@ -1,0 +1,11 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  row-gap: 3%;
+  column-gap: 1%;
+  margin: 1%;
+}
+
+.value-slider {
+  width: 95%;
+}

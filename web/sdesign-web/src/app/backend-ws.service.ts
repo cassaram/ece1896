@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SetShowConfigValue, ShowConfig } from './models/showConfig';
-import { Observable, Observer, Subject } from 'rxjs';
+import { GetBlankShowConfig, SetShowConfigValue, ShowConfig } from './models/showConfig';
+import { BehaviorSubject, Observable, Observer, Subject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { APICommandMethod, APIRequest } from './models/api';
 
@@ -9,7 +9,7 @@ import { APICommandMethod, APIRequest } from './models/api';
 })
 export class BackendWsService {
   private socket$: WebSocketSubject<any>;
-  private ShowConfig = new Subject<ShowConfig>;
+  private ShowConfig = new BehaviorSubject<ShowConfig>(GetBlankShowConfig());
   private ShowConfig_Cache: ShowConfig;
   public ShowConfig$ = this.ShowConfig.asObservable();
 
