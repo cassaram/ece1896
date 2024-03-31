@@ -7,10 +7,12 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/antonholmquist/jason"
 	"github.com/cassaram/ece1896/backend/api"
 	"github.com/cassaram/ece1896/backend/config"
 	"github.com/google/uuid"
@@ -27,16 +29,38 @@ type Core struct {
 	clientsMute   sync.Mutex
 	httpServer    *http.Server
 	serveMux      http.ServeMux
+	cfgPath       string
 }
 
-func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger) *Core {
+func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger, cfgPath string) *Core {
+	// Find a valid config
 	c := Core{
-		RunningConfig: *config.NewShowConfig("NewShow", "NewShow.cfg", channels, busses),
-		logFile:       logFile,
-		address:       address,
-		stop:          make(chan bool),
-		rxChannel:     make(chan api.Command),
-		clients:       make(map[uuid.UUID]*api.Client),
+		//RunningConfig: *config.NewShowConfig("NewShow", "NewShow.cfg", channels, busses),
+		logFile:   logFile,
+		address:   address,
+		stop:      make(chan bool),
+		rxChannel: make(chan api.Command),
+		clients:   make(map[uuid.UUID]*api.Client),
+		cfgPath:   cfgPath,
+	}
+
+	// Find latest config
+	configs, err := c.GetShowConfigs()
+	loadedConfig := false
+	if err != nil || len(configs) == 0 {
+		c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
+		loadedConfig = true
+	}
+	for _, cfg := range configs {
+		if cfg.FileName == "LATEST.showcfg" {
+			if err := c.LoadShowConfig(cfg.FileName); err != nil {
+				c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
+			}
+			loadedConfig = true
+		}
+	}
+	if !loadedConfig {
+		c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
 	}
 
 	// Setup serve mux
@@ -137,6 +161,7 @@ func (c *Core) handleMessage(msg api.Command) {
 			Path:   msg.RequestData.Path,
 			Data:   msg.RequestData.Data,
 		})
+		c.SaveCurrentShowConfig()
 	case api.SHOW_LOAD:
 		err := c.LoadShowConfig(msg.RequestData.Path)
 		c.clientsMute.Lock()
@@ -149,12 +174,47 @@ func (c *Core) handleMessage(msg api.Command) {
 			}
 			break
 		}
-		cfg, _ := json.Marshal(c.RunningConfig)
+		cfg, err := json.Marshal(c.RunningConfig)
+		if err != nil {
+			c.clients[msg.ClientID].TxChannel <- api.Request{
+				Method: api.ERROR,
+				Path:   msg.RequestData.Path,
+				Data:   err.Error(),
+			}
+			break
+		}
 		c.notifyClients(api.Request{
 			Method: api.SHOW_LOAD,
 			Path:   msg.RequestData.Path,
 			Data:   string(cfg),
 		})
+		c.SaveCurrentShowConfig()
+	case api.SHOW_LIST:
+		showConfigs, err := c.GetShowConfigs()
+		c.clientsMute.Lock()
+		defer c.clientsMute.Unlock()
+		if err != nil {
+			c.clients[msg.ClientID].TxChannel <- api.Request{
+				Method: api.ERROR,
+				Path:   msg.RequestData.Path,
+				Data:   err.Error(),
+			}
+			break
+		}
+		cfgsJson, err := json.Marshal(showConfigs)
+		if err != nil {
+			c.clients[msg.ClientID].TxChannel <- api.Request{
+				Method: api.ERROR,
+				Path:   msg.RequestData.Path,
+				Data:   err.Error(),
+			}
+			break
+		}
+		c.clients[msg.ClientID].TxChannel <- api.Request{
+			Method: api.SHOW_LIST,
+			Path:   msg.RequestData.Path,
+			Data:   string(cfgsJson),
+		}
 	}
 }
 
@@ -170,8 +230,8 @@ func (c *Core) notifyClients(msg api.Request) {
 	}
 }
 
-func (c *Core) LoadShowConfig(filepath string) error {
-	cfgBytes, err := os.ReadFile(filepath)
+func (c *Core) LoadShowConfig(filename string) error {
+	cfgBytes, err := os.ReadFile(c.cfgPath + "/shows/" + filename)
 	if err != nil {
 		return err
 	}
@@ -194,16 +254,63 @@ func (c *Core) LoadShowConfig(filepath string) error {
 	return nil
 }
 
-func (c *Core) SaveShowConfig(filepath string) error {
-	cfg, err := json.Marshal(c.RunningConfig)
+func (c *Core) SaveShowConfig(filename string, showCfg config.ShowConfig) error {
+	cfg, err := json.MarshalIndent(showCfg, "", "    ")
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile(filepath, cfg, 0644)
+	err = os.WriteFile(c.cfgPath+"/shows/"+filename, cfg, 0644)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (c *Core) GetShowConfigs() ([]ConfigFile, error) {
+	entries, err := os.ReadDir(c.cfgPath + "/shows/")
+	if err != nil {
+		return []ConfigFile{}, err
+	}
+	showCfgs := make([]ConfigFile, 0)
+	for _, entry := range entries {
+		// Don't handle sub directories
+		if entry.IsDir() {
+			continue
+		}
+		// Don't handle non-valid files
+		info, err := entry.Info()
+		if err != nil {
+			continue
+		}
+		// Don't handle symlinks
+		if info.Mode()&os.ModeSymlink == os.ModeSymlink {
+			continue
+		}
+		// Don't handle non *.showcfg files
+		if filepath.Ext(entry.Name()) != ".showcfg" {
+			continue
+		}
+
+		// Read data as little as needed
+		data, _ := os.ReadFile(c.cfgPath + "/shows/" + entry.Name())
+		dataParsed, _ := jason.NewObjectFromBytes(data)
+		showName, _ := dataParsed.GetString("name")
+
+		showCfgs = append(showCfgs, ConfigFile{
+			Name:     showName,
+			FileName: info.Name(),
+			Size:     info.Size(),
+			ModTime:  info.ModTime().Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	return showCfgs, nil
+}
+
+func (c *Core) SaveCurrentShowConfig() {
+	if err := c.SaveShowConfig("LATEST.showcfg", c.RunningConfig); err != nil {
+		c.logFile.Printf("error writing current config: %v", err)
+	}
 }

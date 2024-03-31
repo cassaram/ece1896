@@ -9,6 +9,7 @@ const (
 	SHOW_GET  CommandMethod = "show_get"
 	SHOW_SET  CommandMethod = "show_set"
 	SHOW_LOAD CommandMethod = "show_load"
+	SHOW_LIST CommandMethod = "show_list"
 )
 
 type Command struct {

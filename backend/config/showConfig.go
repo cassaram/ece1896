@@ -28,6 +28,12 @@ func NewShowConfig(name string, filename string, channels uint64, busses uint64)
 		for j := uint64(0); j < busses; j++ {
 			if i == 0 {
 				c.BusCfgs[j] = *NewBusConfig(j)
+				if j == 0 {
+					c.BusCfgs[j].Master = true
+				} else if j == busses-1 {
+					c.BusCfgs[j].PFL = true
+					c.BusCfgs[j].AFL = true
+				}
 			}
 			c.CrosspointCfgs[i][j] = *NewCrosspointConfig(i, j)
 		}

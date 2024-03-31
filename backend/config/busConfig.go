@@ -6,8 +6,11 @@ import (
 )
 
 type BusConfig struct {
-	Name string `json:"name"`
-	ID   uint64 `json:"id"`
+	Name   string `json:"name"`
+	ID     uint64 `json:"id"`
+	Master bool   `json:"master"`
+	PFL    bool   `json:"pfl"`
+	AFL    bool   `json:"afl"`
 }
 
 func NewBusConfig(id uint64) *BusConfig {
@@ -24,6 +27,12 @@ func (c *BusConfig) GetValue(path []string) (string, error) {
 		return c.Name, nil
 	case "id":
 		return strconv.FormatUint(c.ID, 10), nil
+	case "master":
+		return strconv.FormatBool(c.Master), nil
+	case "pfl":
+		return strconv.FormatBool(c.PFL), nil
+	case "afl":
+		return strconv.FormatBool(c.AFL), nil
 	default:
 		return "", fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
@@ -33,6 +42,27 @@ func (c *BusConfig) SetValue(path []string, value string) error {
 	switch path[0] {
 	case "name":
 		c.Name = value
+		return nil
+	case "master":
+		val, err := strconv.ParseBool(value)
+		if err != nil {
+			return err
+		}
+		c.Master = val
+		return nil
+	case "pfl":
+		val, err := strconv.ParseBool(value)
+		if err != nil {
+			return err
+		}
+		c.PFL = val
+		return nil
+	case "afl":
+		val, err := strconv.ParseBool(value)
+		if err != nil {
+			return err
+		}
+		c.AFL = val
 		return nil
 	default:
 		return fmt.Errorf("encountered unexpected path variable %s", path[0])

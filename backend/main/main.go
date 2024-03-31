@@ -25,9 +25,10 @@ func main() {
 		l.Fatalln(err)
 		return
 	}
+	cfgPath := os.Getenv("CFG_PATH")
 
 	// Start program
-	c := core.NewCore(address, channels, busses, l)
+	c := core.NewCore(address, channels, busses, l, cfgPath)
 	go c.Run()
 
 	// Hold until close
