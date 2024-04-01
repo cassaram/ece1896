@@ -1,6 +1,7 @@
 package core
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -49,18 +50,21 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 	loadedConfig := false
 	if err != nil || len(configs) == 0 {
 		c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
+		c.logFile.Printf("No configs found. Loading new show file.")
 		loadedConfig = true
 	}
 	for _, cfg := range configs {
 		if cfg.FileName == "LATEST.showcfg" {
 			if err := c.LoadShowConfig(cfg.FileName); err != nil {
 				c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
+				c.logFile.Printf("LATEST.showcfg could not be loaded. Loading new show file. Error: %v", err)
 			}
 			loadedConfig = true
 		}
 	}
 	if !loadedConfig {
 		c.RunningConfig = *config.NewShowConfig("NewShow", "NewShow.showcfg", channels, busses)
+		c.logFile.Printf("LATEST.showcfg not found. Loading new show file.")
 	}
 
 	// Setup serve mux
@@ -84,6 +88,8 @@ func (c *Core) Run() {
 	go func() {
 		c.httpServer.Serve(listener)
 	}()
+
+	c.logFile.Printf("Backend app running on tcp %v", c.address)
 
 	// Handle messages
 	for {
@@ -219,7 +225,7 @@ func (c *Core) handleMessage(msg api.Command) {
 }
 
 func (c *Core) notifyClients(msg api.Request) {
-	fmt.Printf("Notifying clients of: %v\n", msg)
+	fmt.Printf("Notifying %d clients of: %v\n", len(c.clients), msg)
 
 	for id, cl := range c.clients {
 		if !cl.Active {
@@ -235,19 +241,26 @@ func (c *Core) LoadShowConfig(filename string) error {
 	if err != nil {
 		return err
 	}
+	cfgCompactBytesBuffer := &bytes.Buffer{}
+	err = json.Compact(cfgCompactBytesBuffer, cfgBytes)
+	if err != nil {
+		return err
+	}
+	cfgCompactBytes := cfgCompactBytesBuffer.Bytes()
 
 	cfg := config.ShowConfig{}
-	err = json.Unmarshal(cfgBytes, &cfg)
+	err = json.Unmarshal(cfgCompactBytes, &cfg)
 	if err != nil {
 		return err
 	}
 
 	c.RunningConfig = cfg
+	c.logFile.Printf("Loading show file: %v", c.cfgPath+"/shows/"+filename)
 
 	msg := api.Request{
 		Method: api.SHOW_LOAD,
 		Path:   "",
-		Data:   string(cfgBytes[:]),
+		Data:   string(cfgCompactBytes[:]),
 	}
 	c.notifyClients(msg)
 
