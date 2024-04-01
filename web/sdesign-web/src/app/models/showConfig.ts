@@ -195,10 +195,16 @@ export function GetBlankShowConfig(): ShowConfig {
       {
         name: 'Bus 1',
         id: 0,
+        master: true,
+        pfl: false,
+        afl: false,
       },
       {
         name: 'Bus 2',
         id: 1,
+        master: false,
+        pfl: true,
+        afl: true,
       },
     ],
     crosspoint_cfgs: [

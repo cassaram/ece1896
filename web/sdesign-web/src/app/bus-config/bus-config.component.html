@@ -1,0 +1,45 @@
+<table mat-table [dataSource]="busConfigs" class="mat-elevation-z8">
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let bus">{{bus.id}}</td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let bus">
+      <mat-form-field>
+        <mat-label>Bus {{bus.id}} name</mat-label>
+        <input matInput [(ngModel)]="bus.name" (change)="setBusName(bus.id, bus.name)">
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <!-- Master Column -->
+  <ng-container matColumnDef="master">
+    <th mat-header-cell *matHeaderCellDef>Master</th>
+    <td mat-cell *matCellDef="let bus">
+      <mat-slide-toggle [checked]="bus.master" (change)="setBusMaster(bus.id, !bus.master)"/>
+    </td>
+  </ng-container>
+
+  <!-- PFL Column -->
+  <ng-container matColumnDef="pfl">
+    <th mat-header-cell *matHeaderCellDef>PFL</th>
+    <td mat-cell *matCellDef="let bus">
+      <mat-slide-toggle [checked]="bus.pfl" (change)="setBusPFL(bus.id, !bus.pfl)"/>
+    </td>
+  </ng-container>
+
+  <!-- AFL Column -->
+  <ng-container matColumnDef="afl">
+    <th mat-header-cell *matHeaderCellDef>AFL</th>
+    <td mat-cell *matCellDef="let bus">
+      <mat-slide-toggle [checked]="bus.afl" (change)="setBusAFL(bus.id, !bus.afl)"/>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

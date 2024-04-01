@@ -6,8 +6,9 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item (click)="setPage(0)">Channel Config</a>
-      <a mat-list-item (click)="setPage(1)">Load Config</a>
-      <a mat-list-item (click)="setPage(2)">Save Config</a>
+      <a mat-list-item (click)="setPage(1)">Bus Config</a>
+      <a mat-list-item (click)="setPage(2)">Load Config</a>
+      <a mat-list-item (click)="setPage(3)">Save Config</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content style="height: 100%;">
@@ -23,7 +24,6 @@
         <div style="display: flex; justify-content: center; text-justify: center;">
           <h1>{{this.showName}}</h1>
         </div>
-
       </mat-toolbar>
       <!-- CHANNEL CONFIGURATION -->
       <div *ngIf="this.channelConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
@@ -33,7 +33,7 @@
           </mat-card>
         </button>
         <div style="flex-grow: 1;">
-          <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" color="accent" style="height: 100%;">
+          <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="height: 100%;">
             <mat-tab label="Input">
               <app-input-page [backendWs]="backendWs"></app-input-page>
             </mat-tab>
@@ -51,6 +51,10 @@
         <div style="bottom: 0;">
           <app-inputbar [backendWs]="backendWs"></app-inputbar>
         </div>
+      </div>
+      <!-- BUS CONFIGURATION -->
+      <div *ngIf="this.busConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
+        <app-bus-config [backendWs]="backendWs" style="flex-grow: 1;"></app-bus-config>
       </div>
     </div>
   </mat-sidenav-content>

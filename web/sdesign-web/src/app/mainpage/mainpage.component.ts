@@ -21,6 +21,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { CompressorPageComponent } from '../compressor-page/compressor-page.component';
 import { GatePageComponent } from '../gate-page/gate-page.component';
+import { BusConfigComponent } from '../bus-config/bus-config.component';
 
 
 @Component({
@@ -45,7 +46,8 @@ import { GatePageComponent } from '../gate-page/gate-page.component';
     EqPageComponent,
     ChannelDialogComponent,
     CompressorPageComponent,
-    GatePageComponent
+    GatePageComponent,
+    BusConfigComponent
   ]
 })
 export class MainpageComponent implements OnInit {
@@ -58,6 +60,7 @@ export class MainpageComponent implements OnInit {
   public channelColor: string = "";
 
   public channelConfigVisible: boolean = true;
+  public busConfigVisible: boolean = false;
 
   constructor(public dialog: MatDialog) {
 
@@ -89,13 +92,14 @@ export class MainpageComponent implements OnInit {
 
   public setPage(pageID: number): void {
     this.channelConfigVisible = false;
+    this.busConfigVisible = false;
 
     switch (pageID) {
       case 0:
         this.channelConfigVisible = true;
         break;
+      case 1:
+        this.busConfigVisible = true;
     }
-
-    console.log(this.channelConfigVisible);
   }
 }
