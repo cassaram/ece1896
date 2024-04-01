@@ -6,4 +6,4 @@ require nhooyr.io/websocket v1.8.10
 
 require github.com/google/uuid v1.6.0
 
-require github.com/antonholmquist/jason v1.0.0 // indirect
+require github.com/antonholmquist/jason v1.0.0
