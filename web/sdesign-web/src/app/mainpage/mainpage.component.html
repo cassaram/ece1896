@@ -7,7 +7,7 @@
     <mat-nav-list>
       <a mat-list-item (click)="setPage(0)">Channel Config</a>
       <a mat-list-item (click)="setPage(1)">Bus Config</a>
-      <a mat-list-item (click)="setPage(2)">Load Config</a>
+      <a mat-list-item (click)="setPage(2)">Config Files</a>
       <a mat-list-item (click)="setPage(3)">Save Config</a>
     </mat-nav-list>
   </mat-sidenav>
@@ -55,6 +55,10 @@
       <!-- BUS CONFIGURATION -->
       <div *ngIf="this.busConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
         <app-bus-config [backendWs]="backendWs" style="flex-grow: 1;"></app-bus-config>
+      </div>
+      <!-- LOAD CONFIG -->
+      <div *ngIf="this.loadConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
+        <app-load-config-page [backendWs]="backendWs"></app-load-config-page>
       </div>
     </div>
   </mat-sidenav-content>

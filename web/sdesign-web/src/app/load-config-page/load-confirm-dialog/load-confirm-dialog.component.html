@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Load Config</h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column;">
+    <em>Current changes will not be saved!</em>
+    <span>Are you sure that you want to load {{this.data.name}}?</span>
+    <span>file path: {{this.data.filename}}</span>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close [mat-dialog-close]="true" color="warn">Ok</button>
+  <button mat-button mat-dialog-close [mat-dialog-close]="false" cdkFocusInitial>No</button>
+</mat-dialog-actions>

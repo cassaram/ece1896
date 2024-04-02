@@ -22,6 +22,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CompressorPageComponent } from '../compressor-page/compressor-page.component';
 import { GatePageComponent } from '../gate-page/gate-page.component';
 import { BusConfigComponent } from '../bus-config/bus-config.component';
+import { LoadConfigPageComponent } from '../load-config-page/load-config-page.component';
 
 
 @Component({
@@ -47,7 +48,8 @@ import { BusConfigComponent } from '../bus-config/bus-config.component';
     ChannelDialogComponent,
     CompressorPageComponent,
     GatePageComponent,
-    BusConfigComponent
+    BusConfigComponent,
+    LoadConfigPageComponent
   ]
 })
 export class MainpageComponent implements OnInit {
@@ -61,6 +63,7 @@ export class MainpageComponent implements OnInit {
 
   public channelConfigVisible: boolean = true;
   public busConfigVisible: boolean = false;
+  public loadConfigVisible: boolean = false;
 
   constructor(public dialog: MatDialog) {
 
@@ -93,6 +96,7 @@ export class MainpageComponent implements OnInit {
   public setPage(pageID: number): void {
     this.channelConfigVisible = false;
     this.busConfigVisible = false;
+    this.loadConfigVisible = false;
 
     switch (pageID) {
       case 0:
@@ -100,6 +104,9 @@ export class MainpageComponent implements OnInit {
         break;
       case 1:
         this.busConfigVisible = true;
+        break;
+      case 2:
+        this.loadConfigVisible = true;
     }
   }
 }

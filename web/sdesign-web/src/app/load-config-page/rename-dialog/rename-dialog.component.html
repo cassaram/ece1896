@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Rename Current Config</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="this.data.name">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close [mat-dialog-close]="this.data.name" color="warn">Apply</button>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+</mat-dialog-actions>

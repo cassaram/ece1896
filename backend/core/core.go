@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -221,6 +222,28 @@ func (c *Core) handleMessage(msg api.Command) {
 			Path:   msg.RequestData.Path,
 			Data:   string(cfgsJson),
 		}
+	case api.SHOW_SAVE:
+		err := c.SaveShowConfig(c.RunningConfig.FileName, c.RunningConfig)
+		if err != nil {
+			c.clientsMute.Lock()
+			defer c.clientsMute.Unlock()
+			c.clients[msg.ClientID].TxChannel <- api.Request{
+				Method: api.ERROR,
+				Path:   "",
+				Data:   err.Error(),
+			}
+		}
+	case api.SHOW_SAVEAS:
+		err := c.SaveShowConfig(msg.RequestData.Data, c.RunningConfig)
+		if err != nil {
+			c.clientsMute.Lock()
+			defer c.clientsMute.Unlock()
+			c.clients[msg.ClientID].TxChannel <- api.Request{
+				Method: api.ERROR,
+				Path:   "",
+				Data:   err.Error(),
+			}
+		}
 	}
 }
 
@@ -268,6 +291,16 @@ func (c *Core) LoadShowConfig(filename string) error {
 }
 
 func (c *Core) SaveShowConfig(filename string, showCfg config.ShowConfig) error {
+	reg, err := regexp.MatchString("\\.showcfg$", filename)
+	if err != nil {
+		return err
+	}
+	if !reg {
+		return fmt.Errorf("filename does not end in .showcfg: %s", filename)
+	}
+
+	showCfg.FileName = filename
+
 	cfg, err := json.MarshalIndent(showCfg, "", "    ")
 	if err != nil {
 		return err
