@@ -70,6 +70,7 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 
 	// Setup serve mux
 	c.serveMux.HandleFunc("/api/v1/ws", c.apiV1Handler)
+	c.serveMux.HandleFunc("/configs/shows/", c.fileDownloadHandler)
 	c.httpServer = &http.Server{
 		Handler:      &c,
 		ReadTimeout:  time.Second * 10,
@@ -105,6 +106,12 @@ func (c *Core) Run() {
 
 func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c.serveMux.ServeHTTP(w, r)
+}
+
+func (c *Core) fileDownloadHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Disposition", "attachment")
+	w.Header().Set("Content-Type", "application/octet-stream")
+	http.StripPrefix("/configs/shows/", http.FileServer(http.Dir(c.cfgPath+"/shows/"))).ServeHTTP(w, r)
 }
 
 func (c *Core) apiV1Handler(w http.ResponseWriter, r *http.Request) {

@@ -7,7 +7,6 @@ import { APICommandMethod, APIRequest } from '../models/api';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoadConfirmDialogComponent } from './load-confirm-dialog/load-confirm-dialog.component';
-import path from 'path';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { ShowConfig } from '../models/showConfig';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
