@@ -5,7 +5,6 @@ import { ShowConfig } from '../models/showConfig';
 import { BusConfig } from '../models/busConfig';
 import { APICommandMethod, APIRequest } from '../models/api';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Console } from 'console';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 
