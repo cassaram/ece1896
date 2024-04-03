@@ -22,11 +22,10 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './bus-config.component.scss'
 })
 export class BusConfigComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   busConfigs: BusConfig[] = [];
   displayedColumns: string[] = ['id', 'name', 'master', 'pfl', 'afl'];
+
+  constructor(private backendWs: BackendWsService) {}
 
   ngOnInit(): void {
     this.backendWs.ShowConfig$.subscribe({
@@ -44,7 +43,6 @@ export class BusConfigComponent implements OnInit {
       path: "bus_cfgs.".concat(String(id).concat(".name")),
       data: name,
     };
-    console.log(request)
     this.backendWs.SendRequest(request);
   }
 

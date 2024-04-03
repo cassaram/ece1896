@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { BackendWsService } from '../backend-ws.service';
 import { ConfigFile } from '../models/configFile';
 import { MatTableModule } from '@angular/material/table';
@@ -10,6 +11,7 @@ import { LoadConfirmDialogComponent } from './load-confirm-dialog/load-confirm-d
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { ShowConfig } from '../models/showConfig';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -26,15 +28,12 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   styleUrl: './load-config-page.component.scss'
 })
 export class LoadConfigPageComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   displayedColumns: string[] = ['name', 'filename', 'mod_time', 'size', 'actions'];
   configFiles: ConfigFile[] = [];
   currentFilename: string = "";
   currentName: string = "";
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private backendWs: BackendWsService) {
 
   }
 
@@ -154,5 +153,17 @@ export class LoadConfigPageComponent implements OnInit {
   async delayRefresh() {
     sleep(50);
     this.refresh();
+  }
+
+  selectAndUploadFiles(event: any) {
+    this.uploadFile(event.target.files);
+  }
+
+  uploadFile(fileList: FileList) {
+    if (fileList.length < 1) {
+      return;
+    }
+    let file: File = fileList[0];
+    this.backendWs.uploadFile('http://localhost:8080/configs/shows/upload/', file).subscribe();
   }
 }

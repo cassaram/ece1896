@@ -4,6 +4,10 @@
     <button mat-flat-button style="margin-right: 1%;" color="primary" (click)="this.renameCurrentConfig()">Rename Current Config</button>
     <button mat-flat-button style="margin-right: 1%;" color="warn" (click)="this.saveConfig()">Save Current</button>
     <button mat-flat-button style="margin-right: 1%;" color="warn" (click)="this.saveAsConfig()">Save Current As</button>
+    <div>
+      <input hidden type="file" name="file" accept=".showcfg" #uploadInput (change)="selectAndUploadFiles($event)">
+      <button mat-flat-button style="margin-right: 1%;" color="primary" (click)="uploadInput.click()">Upload</button>
+    </div>
   </div>
   <table mat-table [dataSource]="this.configFiles" class="mat-elevation-z8" style="flex-grow: 1;">
     <!-- Name Column -->

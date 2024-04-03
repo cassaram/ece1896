@@ -26,13 +26,12 @@ import { MatListModule } from '@angular/material/list';
   ]
 })
 export class InputPageComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   private selectedChannelIdx: number = 0;
   public invertPhase: Boolean = false;
   public stereoGroup: Boolean = false;
   public gain: number = 0;
+
+  constructor(private backendWs: BackendWsService) {}
 
   ngOnInit(): void {
       this.backendWs.ShowConfig$.subscribe({

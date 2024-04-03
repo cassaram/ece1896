@@ -8,7 +8,6 @@
       <a mat-list-item (click)="setPage(0)">Channel Config</a>
       <a mat-list-item (click)="setPage(1)">Bus Config</a>
       <a mat-list-item (click)="setPage(2)">Config Files</a>
-      <a mat-list-item (click)="setPage(3)">Save Config</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content style="height: 100%;">
@@ -35,30 +34,30 @@
         <div style="flex-grow: 1;">
           <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="height: 100%;">
             <mat-tab label="Input">
-              <app-input-page [backendWs]="backendWs"></app-input-page>
+              <app-input-page></app-input-page>
             </mat-tab>
             <mat-tab label="EQ">
-              <app-eq-page [backendWs]="backendWs"></app-eq-page>
+              <app-eq-page></app-eq-page>
             </mat-tab>
             <mat-tab label="Compressor">
-              <app-compressor-page [backendWs]="backendWs"></app-compressor-page>
+              <app-compressor-page></app-compressor-page>
             </mat-tab>
             <mat-tab label="Gate">
-              <app-gate-page [backendWs]="backendWs"></app-gate-page>
+              <app-gate-page></app-gate-page>
             </mat-tab>
           </mat-tab-group>
         </div>
         <div style="bottom: 0;">
-          <app-inputbar [backendWs]="backendWs"></app-inputbar>
+          <app-inputbar></app-inputbar>
         </div>
       </div>
       <!-- BUS CONFIGURATION -->
       <div *ngIf="this.busConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
-        <app-bus-config [backendWs]="backendWs" style="flex-grow: 1;"></app-bus-config>
+        <app-bus-config style="flex-grow: 1;"></app-bus-config>
       </div>
       <!-- LOAD CONFIG -->
       <div *ngIf="this.loadConfigVisible" style="display: flex; flex-direction: column; height: 100%;">
-        <app-load-config-page [backendWs]="backendWs"></app-load-config-page>
+        <app-load-config-page></app-load-config-page>
       </div>
     </div>
   </mat-sidenav-content>

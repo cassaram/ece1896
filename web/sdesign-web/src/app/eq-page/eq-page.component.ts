@@ -22,9 +22,6 @@ import { APIRequest, APICommandMethod } from '../models/api';
   styleUrl: './eq-page.component.scss'
 })
 export class EqPageComponent implements OnInit{
-  @Input()
-  backendWs: BackendWsService;
-
   public selectedChannel: number = 0;
   public eqBypass: Boolean = true;
   public highPassEnable: Boolean = false;
@@ -33,6 +30,8 @@ export class EqPageComponent implements OnInit{
   public midGain: number = 0;
   public lowPassEnable: Boolean = false;
   public lowPassGain: number = 0;
+
+  constructor(private backendWs: BackendWsService) {}
 
   ngOnInit(): void {
     this.backendWs.ShowConfig$.subscribe({

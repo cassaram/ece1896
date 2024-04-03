@@ -14,7 +14,10 @@ import { MainpageComponent } from './mainpage/mainpage.component';
 })
 export class AppComponent implements OnInit{
   title = 'sdesign-web';
-  public backendWs = new BackendWsService();
+
+  constructor(
+    private backendWs: BackendWsService
+  ) {}
 
   ngOnInit(): void {
     this.backendWs.Connect('ws://127.0.0.1:8080/api/v1/ws');

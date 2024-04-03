@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -71,6 +72,7 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 	// Setup serve mux
 	c.serveMux.HandleFunc("/api/v1/ws", c.apiV1Handler)
 	c.serveMux.HandleFunc("/configs/shows/", c.fileDownloadHandler)
+	c.serveMux.HandleFunc("/configs/shows/upload/", c.fileUploadHandler)
 	c.httpServer = &http.Server{
 		Handler:      &c,
 		ReadTimeout:  time.Second * 10,
@@ -112,6 +114,37 @@ func (c *Core) fileDownloadHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment")
 	w.Header().Set("Content-Type", "application/octet-stream")
 	http.StripPrefix("/configs/shows/", http.FileServer(http.Dir(c.cfgPath+"/shows/"))).ServeHTTP(w, r)
+}
+
+func (c *Core) fileUploadHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	r.ParseMultipartForm(32 << 20)
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		c.logFile.Printf(err.Error())
+	}
+	defer file.Close()
+
+	_, err = os.Stat(c.cfgPath + "/shows/" + header.Filename)
+	if !os.IsNotExist(err) {
+		http.Error(w, fmt.Sprintf("File already exists. Nested error: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	// Save file
+	dest, err := os.Create(c.cfgPath + "/shows/" + header.Filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dest.Close()
+
+	if _, err := io.Copy(dest, file); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	c.logFile.Printf("Successfully received file %s", header.Filename)
 }
 
 func (c *Core) apiV1Handler(w http.ResponseWriter, r *http.Request) {

@@ -53,9 +53,6 @@ import { LoadConfigPageComponent } from '../load-config-page/load-config-page.co
   ]
 })
 export class MainpageComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   public showName: string = "";
   public selectedChannel: number = 0;
   public channelName: string = "";
@@ -65,7 +62,7 @@ export class MainpageComponent implements OnInit {
   public busConfigVisible: boolean = false;
   public loadConfigVisible: boolean = false;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private backendWs: BackendWsService) {
 
   }
 

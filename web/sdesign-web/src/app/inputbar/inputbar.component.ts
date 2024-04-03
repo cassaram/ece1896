@@ -16,11 +16,8 @@ import { APICommandMethod, APIRequest } from '../models/api';
   ]
 })
 export class InputbarComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   channels: ChannelConfig[] = [];
-  constructor(
+  constructor(private backendWs: BackendWsService
   ) {}
 
   ngOnInit() {

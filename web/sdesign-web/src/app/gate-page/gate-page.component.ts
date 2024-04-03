@@ -22,9 +22,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   styleUrl: './gate-page.component.scss'
 })
 export class GatePageComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   public selectedChannel: number = 0;
   public bypass: Boolean = true;
   public attackTime: number = 0;
@@ -32,6 +29,8 @@ export class GatePageComponent implements OnInit {
   public releaseTime: number = 0;
   public threshold: number = 0;
   public depth: number = 0;
+
+  constructor(private backendWs: BackendWsService) {}
 
   ngOnInit(): void {
     this.backendWs.ShowConfig$.subscribe({

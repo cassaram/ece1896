@@ -22,9 +22,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   styleUrl: './compressor-page.component.scss'
 })
 export class CompressorPageComponent implements OnInit {
-  @Input()
-  backendWs: BackendWsService;
-
   public selectedChannel: number = 0;
   public bypass: Boolean = true;
   public preGain: number = 0;
@@ -33,6 +30,8 @@ export class CompressorPageComponent implements OnInit {
   public releaseTime: number = 0;
   public threshold: number = 0;
   public ratio: number = 0;
+
+  constructor(private backendWs: BackendWsService) {}
 
   ngOnInit(): void {
       this.backendWs.ShowConfig$.subscribe({
