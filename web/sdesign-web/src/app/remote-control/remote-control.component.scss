@@ -1,0 +1,15 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  row-gap: 3%;
+  column-gap: 1%;
+  margin: 1%;
+}
+
+.fader-slider {
+  width: 95%;
+}
+
+.pan-slider {
+  width: 95%;
+}

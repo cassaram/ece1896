@@ -6,6 +6,7 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item (click)="setPage(0)">Channel Config</a>
+      <a mat-list-item (click)="setPage(3)">Remote Control</a>
       <a mat-list-item (click)="setPage(1)">Bus Config</a>
       <a mat-list-item (click)="setPage(2)">Config Files</a>
     </mat-nav-list>
@@ -50,6 +51,10 @@
         <div style="bottom: 0;">
           <app-inputbar></app-inputbar>
         </div>
+      </div>
+      <!-- REMOTE CONTROL -->
+      <div *ngIf="this.remoteControlVisible" style="display: flex; flex-direction: column; height: 100%;">
+        <app-remote-control style="flex-grow: 1;"></app-remote-control>
       </div>
       <!-- BUS CONFIGURATION -->
       <div *ngIf="this.busConfigVisible" style="display: flex; flex-direction: column; height: 100%;">

@@ -23,6 +23,7 @@ import { CompressorPageComponent } from '../compressor-page/compressor-page.comp
 import { GatePageComponent } from '../gate-page/gate-page.component';
 import { BusConfigComponent } from '../bus-config/bus-config.component';
 import { LoadConfigPageComponent } from '../load-config-page/load-config-page.component';
+import { RemoteControlComponent } from '../remote-control/remote-control.component';
 
 
 @Component({
@@ -49,7 +50,8 @@ import { LoadConfigPageComponent } from '../load-config-page/load-config-page.co
     CompressorPageComponent,
     GatePageComponent,
     BusConfigComponent,
-    LoadConfigPageComponent
+    LoadConfigPageComponent,
+    RemoteControlComponent
   ]
 })
 export class MainpageComponent implements OnInit {
@@ -61,6 +63,7 @@ export class MainpageComponent implements OnInit {
   public channelConfigVisible: boolean = true;
   public busConfigVisible: boolean = false;
   public loadConfigVisible: boolean = false;
+  public remoteControlVisible: boolean = false;
 
   constructor(public dialog: MatDialog, private backendWs: BackendWsService) {
 
@@ -94,6 +97,7 @@ export class MainpageComponent implements OnInit {
     this.channelConfigVisible = false;
     this.busConfigVisible = false;
     this.loadConfigVisible = false;
+    this.remoteControlVisible = false;
 
     switch (pageID) {
       case 0:
@@ -104,6 +108,10 @@ export class MainpageComponent implements OnInit {
         break;
       case 2:
         this.loadConfigVisible = true;
+        break;
+      case 3:
+        this.remoteControlVisible = true;
+        break;
     }
   }
 }

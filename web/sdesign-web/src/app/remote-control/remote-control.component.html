@@ -1,0 +1,134 @@
+<div class="grid-container">
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Channel 1</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Mute</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c1_mute" (toggleChange)="this.setMute(0, !this.c1_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Pan: {{this.c1_pan}}</span>
+            <span matListItemLine>
+              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+                <input matSliderThumb [(ngModel)]="this.c1_pan" (valueChange)="this.setPan(0, this.c1_pan)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Volume: {{this.c1_volume}} dB</span>
+            <span matListItemLine>
+              <mat-slider min="-100" max="10" step="0.5" class="fader-slider">
+                <input matSliderThumb [(ngModel)]="this.c1_volume" (valueChange)="this.setVolume(0, this.c1_volume)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Channel 2</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Mute</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c2_mute" (toggleChange)="this.setMute(1, !this.c2_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Pan: {{this.c2_pan}}</span>
+            <span matListItemLine>
+              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+                <input matSliderThumb [(ngModel)]="this.c2_pan" (valueChange)="this.setPan(1, this.c2_pan)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Volume: {{this.c2_volume}} dB</span>
+            <span matListItemLine>
+              <mat-slider min="-100" max="10" step="0.5" class="fader-slider">
+                <input matSliderThumb [(ngModel)]="this.c2_volume" (valueChange)="this.setVolume(1, this.c2_volume)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Channel 3</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Mute</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c3_mute" (toggleChange)="this.setMute(2, !this.c3_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Pan: {{this.c3_pan}}</span>
+            <span matListItemLine>
+              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+                <input matSliderThumb [(ngModel)]="this.c3_pan" (valueChange)="this.setPan(2, this.c3_pan)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Volume: {{this.c3_volume}} dB</span>
+            <span matListItemLine>
+              <mat-slider min="-100" max="10" step="0.5" class="fader-slider">
+                <input matSliderThumb [(ngModel)]="this.c3_volume" (valueChange)="this.setVolume(2, this.c3_volume)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="grid-item">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Channel 4</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Mute</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c4_mute" (toggleChange)="this.setMute(3, !this.c4_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Pan: {{this.c4_pan}}</span>
+            <span matListItemLine>
+              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+                <input matSliderThumb [(ngModel)]="this.c4_pan" (valueChange)="this.setPan(3, this.c4_pan)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+          <mat-list-item style="width: 100%;">
+            <span matListItemTitle>Volume: {{this.c4_volume}} dB</span>
+            <span matListItemLine>
+              <mat-slider min="-100" max="10" step="0.5" class="fader-slider">
+                <input matSliderThumb [(ngModel)]="this.c4_volume" (valueChange)="this.setVolume(3, this.c4_volume)">
+              </mat-slider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
