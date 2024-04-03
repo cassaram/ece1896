@@ -9,6 +9,9 @@
 *.dylib
 *\bin
 
+# nginx
+nginx/*
+
 # Test binary, built with `go test -c`
 *.test
 
