@@ -81,6 +81,8 @@ export function GetBlankShowConfig(): ShowConfig {
           hold_time: 0,
           release_time: 75,
         },
+        pfl: false,
+        afl: false,
       },
       {
         name: 'Channel 2',
@@ -117,6 +119,8 @@ export function GetBlankShowConfig(): ShowConfig {
           hold_time: 0,
           release_time: 75,
         },
+        pfl: false,
+        afl: false,
       },
       {
         name: 'Channel 3',
@@ -153,6 +157,8 @@ export function GetBlankShowConfig(): ShowConfig {
           hold_time: 0,
           release_time: 75,
         },
+        pfl: false,
+        afl: false,
       },
       {
         name: 'Channel 4',
@@ -189,6 +195,8 @@ export function GetBlankShowConfig(): ShowConfig {
           hold_time: 0,
           release_time: 75,
         },
+        pfl: false,
+        afl: false,
       },
     ],
     bus_cfgs: [

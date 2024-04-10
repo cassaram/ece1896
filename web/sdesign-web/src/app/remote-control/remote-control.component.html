@@ -12,6 +12,18 @@
               <mat-slide-toggle [checked]="this.c1_mute" (toggleChange)="this.setMute(0, !this.c1_mute)"/>
             </span>
           </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>PFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c1_pfl" (toggleChange)="this.setPfl(0, !this.c1_pfl)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>AFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c1_afl" (toggleChange)="this.setAfl(0, !this.c1_afl)"/>
+            </span>
+          </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c1_pan}}</span>
             <span matListItemLine>
@@ -43,6 +55,18 @@
             <span matListItemTitle>Mute</span>
             <span matListItemLine>
               <mat-slide-toggle [checked]="this.c2_mute" (toggleChange)="this.setMute(1, !this.c2_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>PFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c2_pfl" (toggleChange)="this.setPfl(1, !this.c2_pfl)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>AFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c2_afl" (toggleChange)="this.setAfl(1, !this.c2_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
@@ -78,6 +102,18 @@
               <mat-slide-toggle [checked]="this.c3_mute" (toggleChange)="this.setMute(2, !this.c3_mute)"/>
             </span>
           </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>PFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c3_pfl" (toggleChange)="this.setPfl(2, !this.c3_pfl)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>AFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c3_afl" (toggleChange)="this.setAfl(2, !this.c3_afl)"/>
+            </span>
+          </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c3_pan}}</span>
             <span matListItemLine>
@@ -109,6 +145,18 @@
             <span matListItemTitle>Mute</span>
             <span matListItemLine>
               <mat-slide-toggle [checked]="this.c4_mute" (toggleChange)="this.setMute(3, !this.c4_mute)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>PFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c4_pfl" (toggleChange)="this.setPfl(3, !this.c4_pfl)"/>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>AFL</span>
+            <span matListItemLine>
+              <mat-slide-toggle [checked]="this.c4_afl" (toggleChange)="this.setAfl(3, !this.c4_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">

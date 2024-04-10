@@ -13,6 +13,8 @@ type ChannelConfig struct {
 	EQCfg         EQConfig         `json:"eq_cfg"`
 	CompressorCfg CompressorConfig `json:"compressor_cfg"`
 	GateCfg       GateConfig       `json:"gate_cfg"`
+	PFL           bool             `json:"pfl"`
+	AFL           bool             `json:"afl"`
 }
 
 func NewChannelConfig(id uint64) *ChannelConfig {
@@ -24,6 +26,8 @@ func NewChannelConfig(id uint64) *ChannelConfig {
 		EQCfg:         *NewEQConfig(),
 		CompressorCfg: *NewCompressorConfig(),
 		GateCfg:       *NewGateConfig(),
+		PFL:           false,
+		AFL:           false,
 	}
 	return &c
 }
@@ -44,6 +48,10 @@ func (c *ChannelConfig) GetValue(path []string) (string, error) {
 		return c.CompressorCfg.GetValue(path[1:])
 	case "gate_cfg":
 		return c.GateCfg.GetValue(path[1:])
+	case "pfl":
+		return strconv.FormatBool(c.PFL), nil
+	case "afl":
+		return strconv.FormatBool(c.AFL), nil
 	default:
 		return "", fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
@@ -65,6 +73,20 @@ func (c *ChannelConfig) SetValue(path []string, value string) error {
 		return c.CompressorCfg.SetValue(path[1:], value)
 	case "gate_cfg":
 		return c.GateCfg.SetValue(path[1:], value)
+	case "pfl":
+		val, err := strconv.ParseBool(value)
+		if err != nil {
+			return err
+		}
+		c.PFL = val
+		return nil
+	case "afl":
+		val, err := strconv.ParseBool(value)
+		if err != nil {
+			return err
+		}
+		c.AFL = val
+		return nil
 	default:
 		return fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
