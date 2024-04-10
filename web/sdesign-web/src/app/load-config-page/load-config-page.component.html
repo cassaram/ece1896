@@ -40,7 +40,7 @@
       <td mat-cell *matCellDef="let cfg">
         @if (cfg.filename != "LATEST.showcfg") {
           <button mat-raised-button color="primary" (click)="loadConfig(cfg.name, cfg.filename)">Load</button>
-          <a mat-raised-button color="primary" href="http://localhost:8080/configs/shows/{{cfg.filename}}" target="_blank">Download</a>
+          <a mat-raised-button color="primary" href="http://192.168.8.10:8080/configs/shows/{{cfg.filename}}" target="_blank">Download</a>
         }
       </td>
     </ng-container>

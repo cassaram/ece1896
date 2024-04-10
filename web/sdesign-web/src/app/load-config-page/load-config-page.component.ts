@@ -164,6 +164,6 @@ export class LoadConfigPageComponent implements OnInit {
       return;
     }
     let file: File = fileList[0];
-    this.backendWs.uploadFile('http://localhost:8080/configs/shows/upload/', file).subscribe();
+    this.backendWs.uploadFile('http://192.168.8.10:8080/configs/shows/upload/', file).subscribe();
   }
 }

@@ -20,7 +20,7 @@ export class AppComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.backendWs.Connect('ws://127.0.0.1:8080/api/v1/ws');
+    this.backendWs.Connect('ws://192.168.8.10:8080/api/v1/ws');
   }
 
 }
