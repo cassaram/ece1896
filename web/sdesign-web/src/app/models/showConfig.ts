@@ -58,11 +58,11 @@ export function GetBlankShowConfig(): ShowConfig {
         eq_cfg: {
           bypass: true,
           high_pass_enable: false,
-          high_pass_gain: -24,
+          high_pass_gain: 0,
           mid_enable: false,
           mid_gain: 0,
           low_pass_enable: false,
-          low_pass_gain: -24,
+          low_pass_gain: 0,
         },
         compressor_cfg: {
           bypass: true,
@@ -95,11 +95,11 @@ export function GetBlankShowConfig(): ShowConfig {
         eq_cfg: {
           bypass: true,
           high_pass_enable: false,
-          high_pass_gain: -24,
+          high_pass_gain: 0,
           mid_enable: false,
           mid_gain: 0,
           low_pass_enable: false,
-          low_pass_gain: -24,
+          low_pass_gain: 0,
         },
         compressor_cfg: {
           bypass: true,
@@ -132,11 +132,11 @@ export function GetBlankShowConfig(): ShowConfig {
         eq_cfg: {
           bypass: true,
           high_pass_enable: false,
-          high_pass_gain: -24,
+          high_pass_gain: 0,
           mid_enable: false,
           mid_gain: 0,
           low_pass_enable: false,
-          low_pass_gain: -24,
+          low_pass_gain: 0,
         },
         compressor_cfg: {
           bypass: true,
@@ -169,11 +169,11 @@ export function GetBlankShowConfig(): ShowConfig {
         eq_cfg: {
           bypass: true,
           high_pass_enable: false,
-          high_pass_gain: -24,
+          high_pass_gain: 0,
           mid_enable: false,
           mid_gain: 0,
           low_pass_enable: false,
-          low_pass_gain: -24,
+          low_pass_gain: 0,
         },
         compressor_cfg: {
           bypass: true,

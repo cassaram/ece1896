@@ -19,11 +19,11 @@ func NewEQConfig() *EQConfig {
 	c := EQConfig{
 		Bypass:         true,
 		HighPassEnable: false,
-		HighPassGain:   -24,
+		HighPassGain:   0,
 		MidEnable:      false,
 		MidGain:        0,
 		LowPassEnable:  false,
-		LowPassGain:    -24,
+		LowPassGain:    0,
 	}
 	return &c
 }
