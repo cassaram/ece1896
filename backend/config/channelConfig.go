@@ -5,16 +5,23 @@ import (
 	"strconv"
 )
 
+type ChannelMonitorType uint8
+
+const (
+	NONE ChannelMonitorType = 0
+	PFL  ChannelMonitorType = 2
+	AFL  ChannelMonitorType = 3
+)
+
 type ChannelConfig struct {
-	Name          string           `json:"name"`
-	ID            uint64           `json:"id"`
-	Color         string           `json:"color"`
-	InputCfg      InputConfig      `json:"input_cfg"`
-	EQCfg         EQConfig         `json:"eq_cfg"`
-	CompressorCfg CompressorConfig `json:"compressor_cfg"`
-	GateCfg       GateConfig       `json:"gate_cfg"`
-	PFL           bool             `json:"pfl"`
-	AFL           bool             `json:"afl"`
+	Name          string             `json:"name"`
+	ID            uint64             `json:"id"`
+	Color         string             `json:"color"`
+	InputCfg      InputConfig        `json:"input_cfg"`
+	EQCfg         EQConfig           `json:"eq_cfg"`
+	CompressorCfg CompressorConfig   `json:"compressor_cfg"`
+	GateCfg       GateConfig         `json:"gate_cfg"`
+	Monitor       ChannelMonitorType `json:"monitor"`
 }
 
 func NewChannelConfig(id uint64) *ChannelConfig {
@@ -26,8 +33,7 @@ func NewChannelConfig(id uint64) *ChannelConfig {
 		EQCfg:         *NewEQConfig(),
 		CompressorCfg: *NewCompressorConfig(),
 		GateCfg:       *NewGateConfig(),
-		PFL:           false,
-		AFL:           false,
+		Monitor:       NONE,
 	}
 	return &c
 }
@@ -48,10 +54,8 @@ func (c *ChannelConfig) GetValue(path []string) (string, error) {
 		return c.CompressorCfg.GetValue(path[1:])
 	case "gate_cfg":
 		return c.GateCfg.GetValue(path[1:])
-	case "pfl":
-		return strconv.FormatBool(c.PFL), nil
-	case "afl":
-		return strconv.FormatBool(c.AFL), nil
+	case "monitor":
+		return strconv.FormatUint(uint64(c.Monitor), 10), nil
 	default:
 		return "", fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
@@ -73,19 +77,12 @@ func (c *ChannelConfig) SetValue(path []string, value string) error {
 		return c.CompressorCfg.SetValue(path[1:], value)
 	case "gate_cfg":
 		return c.GateCfg.SetValue(path[1:], value)
-	case "pfl":
-		val, err := strconv.ParseBool(value)
+	case "monitor":
+		val, err := strconv.ParseUint(value, 10, 8)
 		if err != nil {
 			return err
 		}
-		c.PFL = val
-		return nil
-	case "afl":
-		val, err := strconv.ParseBool(value)
-		if err != nil {
-			return err
-		}
-		c.AFL = val
+		c.Monitor = ChannelMonitorType(val)
 		return nil
 	default:
 		return fmt.Errorf("encountered unexpected path variable %s", path[0])

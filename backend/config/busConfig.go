@@ -6,11 +6,13 @@ import (
 )
 
 type BusConfig struct {
-	Name   string `json:"name"`
-	ID     uint64 `json:"id"`
-	Master bool   `json:"master"`
-	PFL    bool   `json:"pfl"`
-	AFL    bool   `json:"afl"`
+	Name   string  `json:"name"`
+	ID     uint64  `json:"id"`
+	Master bool    `json:"master"`
+	PFL    bool    `json:"pfl"`
+	AFL    bool    `json:"afl"`
+	Volume float64 `json:"volume"`
+	Pan    float64 `json:"pan"`
 }
 
 func NewBusConfig(id uint64) *BusConfig {
@@ -33,6 +35,10 @@ func (c *BusConfig) GetValue(path []string) (string, error) {
 		return strconv.FormatBool(c.PFL), nil
 	case "afl":
 		return strconv.FormatBool(c.AFL), nil
+	case "volume":
+		return strconv.FormatFloat(c.Volume, 'f', -1, 64), nil
+	case "pan":
+		return strconv.FormatFloat(c.Pan, 'f', -1, 64), nil
 	default:
 		return "", fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
@@ -63,6 +69,20 @@ func (c *BusConfig) SetValue(path []string, value string) error {
 			return err
 		}
 		c.AFL = val
+		return nil
+	case "volume":
+		val, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return err
+		}
+		c.Volume = val
+		return nil
+	case "pan":
+		val, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return err
+		}
+		c.Pan = val
 		return nil
 	default:
 		return fmt.Errorf("encountered unexpected path variable %s", path[0])

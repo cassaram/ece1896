@@ -15,13 +15,13 @@
           <mat-list-item>
             <span matListItemTitle>PFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c1_pfl" (toggleChange)="this.setPfl(0, !this.c1_pfl)"/>
+              <mat-slide-toggle [checked]="this.c1_pfl" (toggleChange)="this.setPflAfl(0, !this.c1_pfl, this.c1_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item>
             <span matListItemTitle>AFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c1_afl" (toggleChange)="this.setAfl(0, !this.c1_afl)"/>
+              <mat-slide-toggle [checked]="this.c1_afl" (toggleChange)="this.setPflAfl(0, this.c1_pfl, !this.c1_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
@@ -60,13 +60,13 @@
           <mat-list-item>
             <span matListItemTitle>PFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c2_pfl" (toggleChange)="this.setPfl(1, !this.c2_pfl)"/>
+              <mat-slide-toggle [checked]="this.c2_pfl" (toggleChange)="this.setPflAfl(1, !this.c2_pfl, this.c2_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item>
             <span matListItemTitle>AFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c2_afl" (toggleChange)="this.setAfl(1, !this.c2_afl)"/>
+              <mat-slide-toggle [checked]="this.c2_afl" (toggleChange)="this.setPflAfl(1, this.c2_pfl, !this.c2_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
@@ -105,13 +105,13 @@
           <mat-list-item>
             <span matListItemTitle>PFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c3_pfl" (toggleChange)="this.setPfl(2, !this.c3_pfl)"/>
+              <mat-slide-toggle [checked]="this.c3_pfl" (toggleChange)="this.setPflAfl(2, !this.c3_pfl, this.c3_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item>
             <span matListItemTitle>AFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c3_afl" (toggleChange)="this.setAfl(2, !this.c3_afl)"/>
+              <mat-slide-toggle [checked]="this.c3_afl" (toggleChange)="this.setPflAfl(2, this.c3_pfl, !this.c3_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
@@ -150,13 +150,13 @@
           <mat-list-item>
             <span matListItemTitle>PFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c4_pfl" (toggleChange)="this.setPfl(3, !this.c4_pfl)"/>
+              <mat-slide-toggle [checked]="this.c4_pfl" (toggleChange)="this.setPflAfl(3, !this.c4_pfl, this.c4_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item>
             <span matListItemTitle>AFL</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c4_afl" (toggleChange)="this.setAfl(3, !this.c4_afl)"/>
+              <mat-slide-toggle [checked]="this.c4_afl" (toggleChange)="this.setPflAfl(3, this.c4_pfl, !this.c4_afl)"/>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">

@@ -4,6 +4,11 @@ import { CompressorConfig, SetCompressorConfigValue } from "./compressorConfig";
 import { GateConfig, SetGateConfigValue } from "./gateConfig";
 import { ShowConfig } from "./showConfig";
 
+export enum ChannelMonitorType {
+  NONE = 0,
+	PFL  = 2,
+  AFL  = 3
+}
 export interface ChannelConfig {
     name: string;
     id: number;
@@ -12,8 +17,7 @@ export interface ChannelConfig {
     eq_cfg: EQConfig;
     compressor_cfg: CompressorConfig;
     gate_cfg: GateConfig;
-    pfl: boolean;
-    afl: boolean;
+    monitor: ChannelMonitorType;
 }
 
 export function SetChannelConfigValue(cfg: ShowConfig, path: string[], value: string): ShowConfig {
@@ -39,11 +43,8 @@ export function SetChannelConfigValue(cfg: ShowConfig, path: string[], value: st
     case "gate_cfg":
       cfg = SetGateConfigValue(cfg, path, value);
       break;
-    case "pfl":
-      cfg.channel_cfgs[+path[1]].pfl = value == 'true';
-      break;
-    case "afl":
-      cfg.channel_cfgs[+path[1]].afl = value == 'true';
+    case "monitor":
+      cfg.channel_cfgs[+path[1]].monitor = +value;
       break;
   }
   return cfg
