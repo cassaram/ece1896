@@ -19,7 +19,7 @@ type Hardware struct {
 
 func NewHardwareEQ(log *log.Logger) *Hardware {
 	// Get I2C bus
-	bus, err := i2creg.Open("")
+	bus, err := i2creg.Open("/dev/i2c-1")
 	if err != nil {
 		panic(err)
 	}
