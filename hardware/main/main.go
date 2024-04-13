@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -92,7 +93,7 @@ func main() {
 	// Configure Mute/PFL/AFL GPIO expander
 	for i := 0; i < 2; i++ {
 		for j := 0; j < 8; j++ {
-			btngpio_mcp.ConfigurePin(uint8(i), uint8(j), false, false, true, true)
+			btngpio_mcp.ConfigurePin(uint8(i), uint8(j), false, true, true, false)
 		}
 	}
 
@@ -119,6 +120,14 @@ func main() {
 
 	// Connect
 	backendWs.Connect()
+
+	for {
+		// Poll data
+		port0, _ := btngpio_mcp.ReadPort(0)
+		port1, _ := btngpio_mcp.ReadPort(1)
+		fmt.Printf("GPIO Rx: 0x%02x 0x%02x\n", port0, port1)
+		time.Sleep(time.Second)
+	}
 
 	// Hold until close
 	done := make(chan os.Signal, 1)

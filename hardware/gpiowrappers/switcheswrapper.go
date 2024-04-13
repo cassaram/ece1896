@@ -99,7 +99,7 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 	}
 
 	// PFL SWITCHES
-	if portA&0x02 != w.portACache&0x02 && portA&0x02 == 0 {
+	if fallingEdge(portA, w.portACache, 1) {
 		val := config.PFL
 		if w.backend.GetConfig().ChannelCfgs[0].Monitor == config.PFL {
 			val = config.NONE
@@ -107,10 +107,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.0.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portA&0x10 != w.portACache&0x10 && portA&0x10 == 0 {
+	if fallingEdge(portA, w.portACache, 4) {
 		val := config.PFL
 		if w.backend.GetConfig().ChannelCfgs[1].Monitor == config.PFL {
 			val = config.NONE
@@ -118,10 +118,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.1.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portA&0x80 != w.portACache&0x80 && portA&0x80 == 0 {
+	if fallingEdge(portA, w.portACache, 7) {
 		val := config.PFL
 		if w.backend.GetConfig().ChannelCfgs[2].Monitor == config.PFL {
 			val = config.NONE
@@ -129,10 +129,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.2.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x04 != w.portBCache&0x04 && portB&0x04 == 0 {
+	if fallingEdge(portB, w.portBCache, 3) {
 		val := config.PFL
 		if w.backend.GetConfig().ChannelCfgs[3].Monitor == config.PFL {
 			val = config.NONE
@@ -140,10 +140,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.3.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x20 != w.portBCache&0x20 && portB&0x20 == 0 {
+	if fallingEdge(portB, w.portBCache, 5) {
 		val := config.PFL
 		if w.backend.GetConfig().BusCfgs[0].Monitor == config.PFL {
 			val = config.NONE
@@ -151,12 +151,12 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "bus_cfgs.0.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
 
 	// AFL Switches
-	if portA&0x04 != w.portACache&0x04 && portA&0x04 == 0 {
+	if fallingEdge(portA, w.portACache, 2) {
 		val := config.AFL
 		if w.backend.GetConfig().ChannelCfgs[0].Monitor == config.AFL {
 			val = config.NONE
@@ -164,10 +164,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.0.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x40 != w.portACache&0x40 && portA&0x40 == 0 {
+	if fallingEdge(portA, w.portACache, 5) {
 		val := config.AFL
 		if w.backend.GetConfig().ChannelCfgs[1].Monitor == config.AFL {
 			val = config.NONE
@@ -175,10 +175,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.1.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x01 != w.portBCache&0x01 && portB&0x01 == 0 {
+	if fallingEdge(portB, w.portBCache, 0) {
 		val := config.AFL
 		if w.backend.GetConfig().ChannelCfgs[2].Monitor == config.AFL {
 			val = config.NONE
@@ -186,10 +186,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.2.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x08 != w.portBCache&0x08 && portB&0x08 == 0 {
+	if fallingEdge(portB, w.portBCache, 3) {
 		val := config.AFL
 		if w.backend.GetConfig().ChannelCfgs[3].Monitor == config.AFL {
 			val = config.NONE
@@ -197,10 +197,10 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "channel_cfgs.3.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if portB&0x40 != w.portBCache&0x40 && portB&0x40 == 0 {
+	if fallingEdge(portB, w.portBCache, 6) {
 		val := config.AFL
 		if w.backend.GetConfig().BusCfgs[0].Monitor == config.AFL {
 			val = config.NONE
@@ -208,7 +208,7 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 		w.backend.Send(backend.Request{
 			Method: backend.SHOW_SET,
 			Path:   "bus_cfgs.0.monitor",
-			Data:   string(val),
+			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
 
