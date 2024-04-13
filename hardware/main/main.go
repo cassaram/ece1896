@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -50,23 +49,12 @@ func main() {
 	gpio_rst_port.Out(gpio.High)
 	time.Sleep(time.Millisecond)
 
-	txData := []byte{0x40, 0x0A, 0x18}
+	// Enable hardware addressing
+	txData := []byte{0x40, 0x0A, 0x28}
 	rxData := make([]byte, 3)
 	gpio_spi_con.Tx(txData, rxData)
-	txData = []byte{0x4E, 0x0A, 0x18}
+	txData = []byte{0x4E, 0x0A, 0x28}
 	gpio_spi_con.Tx(txData, rxData)
-	txData = []byte{0x41, 0x05, 0x00}
-	gpio_spi_con.Tx(txData, rxData)
-	fmt.Println("IOCTRL (0x05) DEVICE 0:", rxData)
-	txData = []byte{0x43, 0x05, 0x00}
-	gpio_spi_con.Tx(txData, rxData)
-	fmt.Println("IOCTRL (0x05) DEVICE 1:", rxData)
-	txData = []byte{0x41, 0x0A, 0x00}
-	gpio_spi_con.Tx(txData, rxData)
-	fmt.Println("IOCTRL (0x0A) DEVICE 0:", rxData)
-	txData = []byte{0x43, 0x0A, 0x00}
-	gpio_spi_con.Tx(txData, rxData)
-	fmt.Println("IOCTRL (0x0A) DEVICE 1:", rxData)
 
 	// Configure ADC SPI bus
 	adc_spi, err := spireg.Open("/dev/spidev0.0")
@@ -100,7 +88,6 @@ func main() {
 	}
 
 	ledgpio := gpiowrappers.NewLEDWrapper(ledgpio_mcp, backendWs)
-	ledgpio.Start()
 
 	// Configure Mute/PFL/AFL GPIO expander
 	for i := 0; i < 2; i++ {
@@ -121,33 +108,17 @@ func main() {
 	}
 
 	btngpio := gpiowrappers.NewSwitchesWrapper(btngpio_mcp, backendWs, btngpio_intA, btngpio_intB, logger)
-	btngpio.Start()
 
 	// Configure ADC
 	faderadc_mcp := mcp3008.NewMCP3008(&adc_spi_con)
 	faderadc_mcp.ReadPort(0) // TEMP
 
+	// Start chip handlers
+	ledgpio.Start()
+	btngpio.Start()
+
 	// Connect
 	backendWs.Connect()
-
-	testTimer := time.NewTicker(1000 * time.Millisecond)
-	for {
-		select {
-		case <-testTimer.C:
-			val, err := ledgpio_mcp.ReadPort(0)
-			if err != nil {
-				fmt.Println(err)
-			}
-			fmt.Printf("0 Val: %08b\n", val)
-
-			val, err = btngpio_mcp.ReadPort(0)
-			if err != nil {
-				fmt.Println(err)
-			}
-			fmt.Printf("1 Val: %08b\n", val)
-
-		}
-	}
 
 	// Hold until close
 	done := make(chan os.Signal, 1)

@@ -1,7 +1,6 @@
 package mcp23s17
 
 import (
-	"fmt"
 	"sync"
 
 	"periph.io/x/conn/v3/spi"
@@ -250,7 +249,6 @@ func (d *MCP23S17) write(register mcp23s17Register, data byte) error {
 	}
 	// Cache
 	d.regCache[register] = data
-	fmt.Printf("TxData: [%02x %02x %02x], RxData: [%02x %02x %02x]\n", txData[0], txData[1], txData[2], rxData[0], rxData[1], rxData[2])
 	return nil
 }
 
@@ -263,7 +261,6 @@ func (d *MCP23S17) read(register mcp23s17Register) (byte, error) {
 		return 0, err
 	}
 	// Cache result
-	//d.regCache[register] = rxData[0]
-	fmt.Printf("TxData: [%02x %02x %02x], RxData: [%02x %02x %02x]\n", txData[0], txData[1], txData[2], rxData[0], rxData[1], rxData[2])
+	d.regCache[register] = rxData[0]
 	return rxData[2], nil
 }
