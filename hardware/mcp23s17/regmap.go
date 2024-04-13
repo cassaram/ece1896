@@ -13,7 +13,8 @@ const (
 	DEFVALB  mcp23s17Register = 0x07
 	INTCONA  mcp23s17Register = 0x08
 	INTCONB  mcp23s17Register = 0x09
-	IOCON    mcp23s17Register = 0x0A // Second address to IOCON on 0x0B
+	IOCONA   mcp23s17Register = 0x0A
+	IOCONB   mcp23s17Register = 0x0B
 	GPPUA    mcp23s17Register = 0x0C
 	GPPUB    mcp23s17Register = 0x0D
 	INTFA    mcp23s17Register = 0x0E

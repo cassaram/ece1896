@@ -1,10 +1,17 @@
 package mcp23s17
 
-import "periph.io/x/conn/v3/spi"
+import (
+	"fmt"
+	"sync"
+
+	"periph.io/x/conn/v3/spi"
+)
 
 type MCP23S17 struct {
-	conn    spi.Conn
-	address uint8
+	conn     spi.Conn
+	address  uint8
+	regCache map[mcp23s17Register]byte
+	regMute  sync.Mutex
 }
 
 // Address is expected to be the value of the A0, A1, A2 bits (0-7)
@@ -12,21 +19,96 @@ type MCP23S17 struct {
 // Init needs to be called before any further commands
 func NewMCP23S17(conn *spi.Conn, address uint8) *MCP23S17 {
 	d := MCP23S17{
-		conn:    *conn,
-		address: address,
+		conn:     *conn,
+		address:  address,
+		regCache: make(map[mcp23s17Register]byte),
 	}
+
+	// Set regCache values to POR values
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
+	d.regCache[IODIRA] = 0xFF
+	d.regCache[IODIRB] = 0xFF
+	d.regCache[IPOLA] = 0x00
+	d.regCache[IPOLB] = 0x00
+	d.regCache[GPINTENA] = 0x00
+	d.regCache[GPINTENB] = 0x00
+	d.regCache[DEFVALA] = 0x00
+	d.regCache[DEFVALB] = 0x00
+	d.regCache[INTCONA] = 0x00
+	d.regCache[INTCONB] = 0x00
+	d.regCache[GPPUA] = 0x00
+	d.regCache[GPPUB] = 0x00
+	d.regCache[INTFA] = 0x00
+	d.regCache[INTFB] = 0x00
+	d.regCache[INTCAPA] = 0x00
+	d.regCache[INTCAPB] = 0x00
+	d.regCache[GPIOA] = 0x00
+	d.regCache[GPIOB] = 0x00
+	d.regCache[OLATA] = 0x00
+	d.regCache[OLATB] = 0x00
+
 	return &d
 }
 
 // Initialize device IO control registers
 func (d *MCP23S17) Init() error {
-	confRegData := 0x00
-	// Disable sequential operations (address pointer does not increment after interactions)
-	confRegData |= (0x01 << 5)
-	// Enable hardware addressing
-	confRegData |= (0x01 << 3)
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
 
-	err := d.write(IOCON, byte(confRegData))
+	/*
+		confRegData := 0x00
+		// Disable sequential operations (address pointer does not increment after interactions)
+		confRegData |= (0x01 << 5)
+		// Enable hardware addressing
+		confRegData |= (0x01 << 3)
+
+		err := d.write(IOCONA, byte(confRegData))
+		if err != nil {
+			return err
+		}
+		err = d.write(IOCONB, byte(confRegData))
+		if err != nil {
+			return err
+		}
+	*/
+
+	// Init GPINTEN
+	err := d.write(GPINTENA, 0xFF)
+	if err != nil {
+		return err
+	}
+	err = d.write(GPINTENB, 0xFF)
+	if err != nil {
+		return err
+	}
+
+	// Init pull-ups
+	err = d.write(GPPUA, 0xFF)
+	if err != nil {
+		return err
+	}
+	err = d.write(GPPUB, 0xFF)
+	if err != nil {
+		return err
+	}
+
+	// Init outputs high
+	err = d.write(OLATA, 0xFF)
+	if err != nil {
+		return err
+	}
+	err = d.write(OLATB, 0xFF)
+	if err != nil {
+		return err
+	}
+
+	// Init port direction
+	err = d.write(IODIRA, 0xFF)
+	if err != nil {
+		return err
+	}
+	err = d.write(IODIRB, 0xFF)
 	if err != nil {
 		return err
 	}
@@ -45,100 +127,62 @@ func (d *MCP23S17) Init() error {
 }
 
 func (d *MCP23S17) ConfigurePin(port uint8, pin uint8, output bool, invert bool, interrupt bool, pullup bool) error {
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
+
 	switch port {
 	case 0:
 		// PORT A
 		if output {
 			// Set Direction
-			val, err := d.read(IODIRA)
-			if err != nil {
-				return err
-			}
-			d.write(IODIRA, (val | (0x01 << pin)))
+			d.write(IODIRA, (d.regCache[IODIRA] &^ (0x01 << pin)))
 		} else {
 			// Set Direction
-			val, err := d.read(IODIRA)
-			if err != nil {
-				return err
-			}
-			d.write(IODIRA, (val &^ (0x01 << pin)))
+			d.write(IODIRA, (d.regCache[IODIRA] | (0x01 << pin)))
 			// Set input polarity
-			val, err = d.read(IPOLA)
-			if err != nil {
-				return err
-			}
 			if invert {
-				d.write(IPOLA, (val | (0x01 << pin)))
+				d.write(IPOLA, (d.regCache[IPOLA] | (0x01 << pin)))
 			} else {
-				d.write(IPOLA, (val &^ (0x01 << pin)))
+				d.write(IPOLA, (d.regCache[IPOLA] &^ (0x01 << pin)))
 			}
 			// Set interrupt enable
-			val, err = d.read(GPINTENA)
-			if err != nil {
-				return err
-			}
 			if interrupt {
-				d.write(GPINTENA, (val | (0x01 << pin)))
+				d.write(GPINTENA, (d.regCache[GPINTENA] | (0x01 << pin)))
 			} else {
-				d.write(GPINTENA, (val &^ (0x01 << pin)))
+				d.write(GPINTENA, (d.regCache[GPINTENA] &^ (0x01 << pin)))
 			}
-			d.write(INTCONA, 0x00) // Set to use previous value
 			// Set pull-up
-			val, err = d.read(GPPUA)
-			if err != nil {
-				return err
-			}
 			if pullup {
-				d.write(GPPUA, (val | (0x01 << pin)))
+				d.write(GPPUA, (d.regCache[GPPUA] | (0x01 << pin)))
 			} else {
-				d.write(GPPUA, (val &^ (0x01 << pin)))
+				d.write(GPPUA, (d.regCache[GPPUA] &^ (0x01 << pin)))
 			}
 		}
 	case 1:
 		// PORT B
 		if output {
 			// Set Direction
-			val, err := d.read(IODIRB)
-			if err != nil {
-				return err
-			}
-			d.write(IODIRB, (val | (0x01 << pin)))
+			d.write(IODIRB, (d.regCache[IODIRB] &^ (0x01 << pin)))
 		} else {
 			// Set Direction
-			val, err := d.read(IODIRB)
-			if err != nil {
-				return err
-			}
-			d.write(IODIRB, (val &^ (0x01 << pin)))
+			d.write(IODIRB, (d.regCache[IODIRB] | (0x01 << pin)))
 			// Set input polarity
-			val, err = d.read(IPOLB)
-			if err != nil {
-				return err
-			}
 			if invert {
-				d.write(IPOLB, (val | (0x01 << pin)))
+				d.write(IPOLB, (d.regCache[IPOLB] | (0x01 << pin)))
 			} else {
-				d.write(IPOLB, (val &^ (0x01 << pin)))
+				d.write(IPOLB, (d.regCache[IPOLB] &^ (0x01 << pin)))
 			}
 			// Set interrupt enable
-			val, err = d.read(GPINTENB)
-			if err != nil {
-				return err
-			}
 			if interrupt {
-				d.write(GPINTENB, (val | (0x01 << pin)))
+				d.write(GPINTENB, (d.regCache[GPINTENB] | (0x01 << pin)))
 			} else {
-				d.write(GPINTENB, (val &^ (0x01 << pin)))
+				d.write(GPINTENB, (d.regCache[GPINTENB] &^ (0x01 << pin)))
 			}
 			// Set pull-up
-			val, err = d.read(GPPUB)
-			if err != nil {
-				return err
-			}
 			if pullup {
-				d.write(GPPUB, (val | (0x01 << pin)))
+				d.write(GPPUB, (d.regCache[GPPUB] | (0x01 << pin)))
 			} else {
-				d.write(GPPUB, (val &^ (0x01 << pin)))
+				d.write(GPPUB, (d.regCache[GPPUB] &^ (0x01 << pin)))
 			}
 		}
 	}
@@ -146,37 +190,32 @@ func (d *MCP23S17) ConfigurePin(port uint8, pin uint8, output bool, invert bool,
 }
 
 func (d *MCP23S17) SetPin(port uint8, pin uint8, value bool) error {
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
+
 	switch port {
 	case 0:
 		// Port A
-		val, err := d.read(GPIOA)
-		if err != nil {
-			return err
-		}
 		if value {
-			err := d.write(GPIOA, (val | (0x01 << pin)))
+			err := d.write(GPIOA, (d.regCache[GPIOA] | (0x01 << pin)))
 			if err != nil {
 				return err
 			}
 		} else {
-			err := d.write(GPIOA, (val &^ (0x01 << pin)))
+			err := d.write(GPIOA, (d.regCache[GPIOA] &^ (0x01 << pin)))
 			if err != nil {
 				return err
 			}
 		}
 	case 1:
 		// Port B
-		val, err := d.read(GPIOB)
-		if err != nil {
-			return err
-		}
 		if value {
-			err := d.write(GPIOB, (val | (0x01 << pin)))
+			err := d.write(GPIOB, (d.regCache[GPIOB] | (0x01 << pin)))
 			if err != nil {
 				return err
 			}
 		} else {
-			err := d.write(GPIOB, (val &^ (0x01 << pin)))
+			err := d.write(GPIOB, (d.regCache[GPIOB] &^ (0x01 << pin)))
 			if err != nil {
 				return err
 			}
@@ -186,6 +225,9 @@ func (d *MCP23S17) SetPin(port uint8, pin uint8, value bool) error {
 }
 
 func (d *MCP23S17) ReadPort(port uint8) (byte, error) {
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
+
 	switch port {
 	case 0:
 		// Port A
@@ -198,6 +240,7 @@ func (d *MCP23S17) ReadPort(port uint8) (byte, error) {
 }
 
 func (d *MCP23S17) write(register mcp23s17Register, data byte) error {
+	// Write
 	controlByte := 0x40 | ((d.address & 0x07) << 1)
 	txData := []byte{controlByte, byte(register), data}
 	rxData := make([]byte, len(txData))
@@ -205,16 +248,22 @@ func (d *MCP23S17) write(register mcp23s17Register, data byte) error {
 	if err != nil {
 		return err
 	}
+	// Cache
+	d.regCache[register] = data
+	fmt.Printf("TxData: [%02x %02x %02x], RxData: [%02x %02x %02x]\n", txData[0], txData[1], txData[2], rxData[0], rxData[1], rxData[2])
 	return nil
 }
 
 func (d *MCP23S17) read(register mcp23s17Register) (byte, error) {
 	controlByte := 0x41 | ((d.address & 0x07) << 1)
-	txData := []byte{controlByte, byte(register)}
+	txData := []byte{controlByte, byte(register), 0xFF}
 	rxData := make([]byte, len(txData))
 	err := d.conn.Tx(txData, rxData)
 	if err != nil {
 		return 0, err
 	}
-	return rxData[0], nil
+	// Cache result
+	//d.regCache[register] = rxData[0]
+	fmt.Printf("TxData: [%02x %02x %02x], RxData: [%02x %02x %02x]\n", txData[0], txData[1], txData[2], rxData[0], rxData[1], rxData[2])
+	return rxData[2], nil
 }
