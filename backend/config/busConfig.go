@@ -6,13 +6,12 @@ import (
 )
 
 type BusConfig struct {
-	Name   string  `json:"name"`
-	ID     uint64  `json:"id"`
-	Master bool    `json:"master"`
-	PFL    bool    `json:"pfl"`
-	AFL    bool    `json:"afl"`
-	Volume float64 `json:"volume"`
-	Pan    float64 `json:"pan"`
+	Name    string             `json:"name"`
+	ID      uint64             `json:"id"`
+	Master  bool               `json:"master"`
+	Monitor ChannelMonitorType `json:"monitor"`
+	Volume  float64            `json:"volume"`
+	Pan     float64            `json:"pan"`
 }
 
 func NewBusConfig(id uint64) *BusConfig {
@@ -31,10 +30,8 @@ func (c *BusConfig) GetValue(path []string) (string, error) {
 		return strconv.FormatUint(c.ID, 10), nil
 	case "master":
 		return strconv.FormatBool(c.Master), nil
-	case "pfl":
-		return strconv.FormatBool(c.PFL), nil
-	case "afl":
-		return strconv.FormatBool(c.AFL), nil
+	case "monitor":
+		return strconv.FormatUint(uint64(c.Monitor), 10), nil
 	case "volume":
 		return strconv.FormatFloat(c.Volume, 'f', -1, 64), nil
 	case "pan":
@@ -56,19 +53,12 @@ func (c *BusConfig) SetValue(path []string, value string) error {
 		}
 		c.Master = val
 		return nil
-	case "pfl":
-		val, err := strconv.ParseBool(value)
+	case "monitor":
+		val, err := strconv.ParseUint(value, 10, 64)
 		if err != nil {
 			return err
 		}
-		c.PFL = val
-		return nil
-	case "afl":
-		val, err := strconv.ParseBool(value)
-		if err != nil {
-			return err
-		}
-		c.AFL = val
+		c.Monitor = ChannelMonitorType(val)
 		return nil
 	case "volume":
 		val, err := strconv.ParseFloat(value, 64)

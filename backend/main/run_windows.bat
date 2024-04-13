@@ -5,4 +5,4 @@ set CHANNELS=4
 set BUSSES=2
 set CFG_PATH=G:/cfgs
 
-.\bin\windows_amd64.exe
+.\bin\sdesign-backend-windows_amd64.exe
