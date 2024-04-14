@@ -9,7 +9,7 @@ type CrosspointConfig struct {
 	BusID     uint64  `json:"bus_id"`
 	ChannelID uint64  `json:"channel_id"`
 	Enable    bool    `json:"enable"`
-	Pan       float64 `json:"pan"`
+	Pan       int64   `json:"pan"`
 	Volume    float64 `json:"volume"`
 }
 
@@ -33,7 +33,7 @@ func (c *CrosspointConfig) GetValue(path []string) (string, error) {
 	case "enable":
 		return strconv.FormatBool(c.Enable), nil
 	case "pan":
-		return strconv.FormatFloat(c.Pan, 'f', -1, 64), nil
+		return strconv.FormatInt(c.Pan, 10), nil
 	case "volume":
 		return strconv.FormatFloat(c.Volume, 'f', -1, 64), nil
 	default:
@@ -51,7 +51,7 @@ func (c *CrosspointConfig) SetValue(path []string, value string) error {
 		c.Enable = val
 		return nil
 	case "pan":
-		val, err := strconv.ParseFloat(value, 64)
+		val, err := strconv.ParseInt(value, 10, 64)
 		if err != nil {
 			return err
 		}

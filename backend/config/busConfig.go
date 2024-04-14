@@ -11,7 +11,7 @@ type BusConfig struct {
 	Master  bool               `json:"master"`
 	Monitor ChannelMonitorType `json:"monitor"`
 	Volume  float64            `json:"volume"`
-	Pan     float64            `json:"pan"`
+	Pan     int64              `json:"pan"`
 }
 
 func NewBusConfig(id uint64) *BusConfig {
@@ -35,7 +35,7 @@ func (c *BusConfig) GetValue(path []string) (string, error) {
 	case "volume":
 		return strconv.FormatFloat(c.Volume, 'f', -1, 64), nil
 	case "pan":
-		return strconv.FormatFloat(c.Pan, 'f', -1, 64), nil
+		return strconv.FormatInt(c.Pan, 10), nil
 	default:
 		return "", fmt.Errorf("encountered unexpected path variable %s", path[0])
 	}
@@ -68,7 +68,7 @@ func (c *BusConfig) SetValue(path []string, value string) error {
 		c.Volume = val
 		return nil
 	case "pan":
-		val, err := strconv.ParseFloat(value, 64)
+		val, err := strconv.ParseInt(value, 10, 64)
 		if err != nil {
 			return err
 		}
