@@ -1,6 +1,7 @@
 package gpiowrappers
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -41,7 +42,8 @@ func (w *EncodersWrapper) Start() {
 func (w *EncodersWrapper) intAHandler() {
 	for {
 		for w.intAPin.WaitForEdge(-1) {
-			val, err := w.expander.ReadPort(0)
+			// Get catured value
+			val, err := w.expander.ReadINTCAP(0)
 			if err != nil {
 				w.logger.Printf("error reading port A: %v\n", err)
 			}
@@ -54,7 +56,8 @@ func (w *EncodersWrapper) intAHandler() {
 func (w *EncodersWrapper) intBHandler() {
 	for {
 		for w.intBPin.WaitForEdge(-1) {
-			val, err := w.expander.ReadPort(1)
+			// Get catured value
+			val, err := w.expander.ReadINTCAP(1)
 			if err != nil {
 				w.logger.Printf("error reading port B: %v\n", err)
 			}
@@ -85,6 +88,7 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 		}
 	}
 	if isEdge(portA, w.portACache, 3) || isEdge(portA, w.portACache, 4) {
+		fmt.Println("Rotary Encoder: ", processRotaryEncoder(portA, portA, w.portACache, w.portACache, 3, 4))
 		switch processRotaryEncoder(portA, portA, w.portACache, w.portACache, 3, 4) {
 		case -1:
 			oldVal := w.backend.GetConfig().CrosspointCfgs[1][0].Pan
@@ -174,7 +178,8 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 }
 
 func isEdge(new byte, old byte, bit uint8) bool {
-	return ((old & bit) != (new & bit))
+	mask := byte(0x01 << bit)
+	return ((old & mask) != (new & mask))
 }
 
 // Returns -1, 0, or 1 depending on change in encoder

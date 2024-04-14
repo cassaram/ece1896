@@ -221,6 +221,19 @@ func (d *MCP23S17) ReadPort(port uint8) (byte, error) {
 	return 0, nil
 }
 
+func (d *MCP23S17) ReadINTCAP(port uint8) (byte, error) {
+	d.regMute.Lock()
+	defer d.regMute.Unlock()
+
+	switch port {
+	case 0:
+		return d.read(INTCAPA)
+	case 1:
+		return d.read(INTCAPB)
+	}
+	return 0, nil
+}
+
 func (d *MCP23S17) write(register mcp23s17Register, data byte) error {
 	// Write
 	controlByte := 0x40 | ((d.address & 0x07) << 1)

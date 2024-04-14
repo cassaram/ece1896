@@ -47,7 +47,7 @@ func main() {
 	gpio_rst_port.Out(gpio.Low)
 	time.Sleep(2 * time.Microsecond)
 	gpio_rst_port.Out(gpio.High)
-	time.Sleep(time.Millisecond)
+	time.Sleep(time.Second)
 
 	// Enable hardware addressing
 	txData := []byte{0x40, 0x0A, 0x28}
@@ -80,6 +80,12 @@ func main() {
 	ledgpio_mcp.Init()
 	btngpio_mcp.Init()
 	rotgpio_mcp.Init()
+
+	// Do a read operation from the LED MCP
+	// IDK why I need this but if I don't have it the LEDs don't work write
+	// on first try from cold boot
+	ledgpio_mcp.ReadPort(0)
+	ledgpio_mcp.ReadPort(1)
 
 	// Configure LED GPIO Expander
 	for i := 0; i < 2; i++ {
@@ -149,6 +155,15 @@ func main() {
 	btngpio_mcp.ReadPort(1)
 	rotgpio_mcp.ReadPort(0)
 	rotgpio_mcp.ReadPort(1)
+
+	// Restart if this is the first run
+	// This is the janky way to get the LEDs to work properly
+	// Use it by having a start.sh execute the program with FIRSTSTART = "true",
+	// then execute the program again with FIRSTSTART = "false" or litterally anything
+	if os.Getenv("FIRSTSTART") == "true" {
+		// Kill program
+		return
+	}
 
 	// Hold until close
 	done := make(chan os.Signal, 1)
