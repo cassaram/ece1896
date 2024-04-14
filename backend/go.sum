@@ -6,11 +6,5 @@ golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8 h1:ESSUROHIBHg7USnszlcdmjBEw
 golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8/go.mod h1:/lliqkxwWAhPjf5oSOIJup2XcqJaw8RGS6k3TGEc7GI=
 nhooyr.io/websocket v1.8.10 h1:mv4p+MnGrLDcPlBoWsvPP7XCzTYMXP9F9eIGoKbgx7Q=
 nhooyr.io/websocket v1.8.10/go.mod h1:rN9OFWIUwuxg4fR5tELlYC04bXYowCP9GX47ivo2l+c=
-periph.io/x/conn v0.0.2 h1:Skl3egL0ON+ihyPojXbX3HIpwESBvt2QsOtZo5fGLVQ=
-periph.io/x/conn v0.0.2/go.mod h1:paVTwhQZmaB+bcf/7ItVj50T3otXX9s9Sz3AiiY38oI=
 periph.io/x/conn/v3 v3.7.0 h1:f1EXLn4pkf7AEWwkol2gilCNZ0ElY+bxS4WE2PQXfrA=
 periph.io/x/conn/v3 v3.7.0/go.mod h1:ypY7UVxgDbP9PJGwFSVelRRagxyXYfttVh7hJZUHEhg=
-periph.io/x/host v0.0.1 h1:xE83x4KluTcn3rjzOJ+IGls3L0TzlwVbcoEoNLQ70Cc=
-periph.io/x/host v0.0.1/go.mod h1:ciJdiIdqJlpusUyjb0mKFzlhNJl14eFDJtqtNLnkgr8=
-periph.io/x/host/v3 v3.8.2 h1:ayKUDzgUCN0g8+/xM9GTkWaOBhSLVcVHGTfjAOi8OsQ=
-periph.io/x/host/v3 v3.8.2/go.mod h1:yFL76AesNHR68PboofSWYaQTKmvPXsQH2Apvp/ls/K4=
