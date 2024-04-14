@@ -55,23 +55,6 @@ func (d *MCP23S17) Init() error {
 	d.regMute.Lock()
 	defer d.regMute.Unlock()
 
-	/*
-		confRegData := 0x00
-		// Disable sequential operations (address pointer does not increment after interactions)
-		confRegData |= (0x01 << 5)
-		// Enable hardware addressing
-		confRegData |= (0x01 << 3)
-
-		err := d.write(IOCONA, byte(confRegData))
-		if err != nil {
-			return err
-		}
-		err = d.write(IOCONB, byte(confRegData))
-		if err != nil {
-			return err
-		}
-	*/
-
 	// Init GPINTEN
 	err := d.write(GPINTENA, 0xFF)
 	if err != nil {

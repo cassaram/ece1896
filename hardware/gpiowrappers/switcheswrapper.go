@@ -44,7 +44,7 @@ func (w *SwitchesWrapper) intAHandler() {
 			if err != nil {
 				w.logger.Printf("error reading port A: %v\n", err)
 			}
-			w.logger.Printf("INT A Triggered. Old value: %02x, New value: %02x", w.portACache, val)
+			//w.logger.Printf("INT A Triggered. Old value: %02x, New value: %02x", w.portACache, val)
 			w.updateValues(val, w.portBCache)
 		}
 	}
@@ -57,7 +57,7 @@ func (w *SwitchesWrapper) intBHandler() {
 			if err != nil {
 				w.logger.Printf("error reading port B: %v\n", err)
 			}
-			w.logger.Printf("INT B Triggered. Old value: %02x, New value: %02x", w.portBCache, val)
+			//w.logger.Printf("INT B Triggered. Old value: %02x, New value: %02x", w.portBCache, val)
 			w.updateValues(w.portACache, val)
 		}
 	}
@@ -132,7 +132,7 @@ func (w *SwitchesWrapper) updateValues(portA byte, portB byte) {
 			Data:   strconv.FormatInt(int64(val), 10),
 		})
 	}
-	if fallingEdge(portB, w.portBCache, 3) {
+	if fallingEdge(portB, w.portBCache, 2) {
 		val := config.PFL
 		if w.backend.GetConfig().ChannelCfgs[3].Monitor == config.PFL {
 			val = config.NONE

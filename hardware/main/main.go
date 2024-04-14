@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -58,7 +57,7 @@ func main() {
 	gpio_spi_con.Tx(txData, rxData)
 
 	// Configure ADC SPI bus
-	adc_spi, err := spireg.Open("/dev/spidev0.0")
+	adc_spi, err := spireg.Open("/dev/spidev0.1")
 	if err != nil {
 		logger.Fatalf(err.Error())
 	}
@@ -76,9 +75,11 @@ func main() {
 	// Get MCP23S17 chips
 	ledgpio_mcp := mcp23s17.NewMCP23S17(&gpio_spi_con, 0)
 	btngpio_mcp := mcp23s17.NewMCP23S17(&gpio_spi_con, 1)
+	rotgpio_mcp := mcp23s17.NewMCP23S17(&gpio_spi_con, 2)
 
 	ledgpio_mcp.Init()
 	btngpio_mcp.Init()
+	rotgpio_mcp.Init()
 
 	// Configure LED GPIO Expander
 	for i := 0; i < 2; i++ {
@@ -110,24 +111,44 @@ func main() {
 
 	btngpio := gpiowrappers.NewSwitchesWrapper(btngpio_mcp, backendWs, btngpio_intA, btngpio_intB, logger)
 
+	// Configure the rotary encoder GPIO expander
+	for i := uint8(0); i < 2; i++ {
+		for j := uint8(0); j < 8; j++ {
+			rotgpio_mcp.ConfigurePin(i, j, false, true, true, true)
+		}
+	}
+	rotgpio_intA := gpioreg.ByName("GPIO24")
+	err = rotgpio_intA.In(gpio.PullUp, gpio.FallingEdge)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	rotgpio_intB := gpioreg.ByName("GPIO25")
+	err = rotgpio_intB.In(gpio.PullUp, gpio.FallingEdge)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	rotgpio := gpiowrappers.NewEncodersWrapper(rotgpio_mcp, backendWs, rotgpio_intA, rotgpio_intB, logger)
+
 	// Configure ADC
 	faderadc_mcp := mcp3008.NewMCP3008(&adc_spi_con)
-	faderadc_mcp.ReadPort(0) // TEMP
+	faderadc := gpiowrappers.NewFaderWrapper(faderadc_mcp, backendWs, ledgpio)
 
 	// Start chip handlers
 	ledgpio.Start()
 	btngpio.Start()
+	rotgpio.Start()
+	faderadc.Start(10 * time.Millisecond)
 
 	// Connect
 	backendWs.Connect()
 
-	for {
-		// Poll data
-		port0, _ := btngpio_mcp.ReadPort(0)
-		port1, _ := btngpio_mcp.ReadPort(1)
-		fmt.Printf("GPIO Rx: 0x%02x 0x%02x\n", port0, port1)
-		time.Sleep(time.Second)
-	}
+	// Read data from MCPs without doing anything
+	// IDK why this is needed but it fixes the interrupts
+	btngpio_mcp.ReadPort(0)
+	btngpio_mcp.ReadPort(1)
+	rotgpio_mcp.ReadPort(0)
+	rotgpio_mcp.ReadPort(1)
 
 	// Hold until close
 	done := make(chan os.Signal, 1)
