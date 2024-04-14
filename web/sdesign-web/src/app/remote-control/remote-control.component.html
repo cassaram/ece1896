@@ -13,21 +13,19 @@
             </span>
           </mat-list-item>
           <mat-list-item>
-            <span matListItemTitle>PFL</span>
+            <span matListItemTitle>Monitoring</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c1_pfl" (toggleChange)="this.setPflAfl(0, !this.c1_pfl, this.c1_afl)"/>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>AFL</span>
-            <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c1_afl" (toggleChange)="this.setPflAfl(0, this.c1_pfl, !this.c1_afl)"/>
+              <mat-radio-group [(ngModel)]="this.c1_mon" (change)="this.setPflAfl(0, this.c1_mon)">
+                <mat-radio-button [value]="0">None</mat-radio-button>
+                <mat-radio-button [value]="2">PFL</mat-radio-button>
+                <mat-radio-button [value]="3">AFL</mat-radio-button>
+              </mat-radio-group>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c1_pan}}</span>
             <span matListItemLine>
-              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+              <mat-slider min="-100" max="100" step="1" class="pan-slider">
                 <input matSliderThumb [(ngModel)]="this.c1_pan" (valueChange)="this.setPan(0, this.c1_pan)">
               </mat-slider>
             </span>
@@ -58,21 +56,19 @@
             </span>
           </mat-list-item>
           <mat-list-item>
-            <span matListItemTitle>PFL</span>
+            <span matListItemTitle>Monitoring</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c2_pfl" (toggleChange)="this.setPflAfl(1, !this.c2_pfl, this.c2_afl)"/>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>AFL</span>
-            <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c2_afl" (toggleChange)="this.setPflAfl(1, this.c2_pfl, !this.c2_afl)"/>
+              <mat-radio-group [(ngModel)]="this.c2_mon" (change)="this.setPflAfl(1, this.c2_mon)">
+                <mat-radio-button [value]="0">None</mat-radio-button>
+                <mat-radio-button [value]="2">PFL</mat-radio-button>
+                <mat-radio-button [value]="3">AFL</mat-radio-button>
+              </mat-radio-group>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c2_pan}}</span>
             <span matListItemLine>
-              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+              <mat-slider min="-100" max="100" step="1" class="pan-slider">
                 <input matSliderThumb [(ngModel)]="this.c2_pan" (valueChange)="this.setPan(1, this.c2_pan)">
               </mat-slider>
             </span>
@@ -103,21 +99,19 @@
             </span>
           </mat-list-item>
           <mat-list-item>
-            <span matListItemTitle>PFL</span>
+            <span matListItemTitle>Monitoring</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c3_pfl" (toggleChange)="this.setPflAfl(2, !this.c3_pfl, this.c3_afl)"/>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>AFL</span>
-            <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c3_afl" (toggleChange)="this.setPflAfl(2, this.c3_pfl, !this.c3_afl)"/>
+              <mat-radio-group [(ngModel)]="this.c3_mon" (change)="this.setPflAfl(2, this.c3_mon)">
+                <mat-radio-button [value]="0">None</mat-radio-button>
+                <mat-radio-button [value]="2">PFL</mat-radio-button>
+                <mat-radio-button [value]="3">AFL</mat-radio-button>
+              </mat-radio-group>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c3_pan}}</span>
             <span matListItemLine>
-              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+              <mat-slider min="-100" max="100" step="1" class="pan-slider">
                 <input matSliderThumb [(ngModel)]="this.c3_pan" (valueChange)="this.setPan(2, this.c3_pan)">
               </mat-slider>
             </span>
@@ -148,21 +142,19 @@
             </span>
           </mat-list-item>
           <mat-list-item>
-            <span matListItemTitle>PFL</span>
+            <span matListItemTitle>Monitoring</span>
             <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c4_pfl" (toggleChange)="this.setPflAfl(3, !this.c4_pfl, this.c4_afl)"/>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>AFL</span>
-            <span matListItemLine>
-              <mat-slide-toggle [checked]="this.c4_afl" (toggleChange)="this.setPflAfl(3, this.c4_pfl, !this.c4_afl)"/>
+              <mat-radio-group [(ngModel)]="this.c4_mon" (change)="this.setPflAfl(3, this.c4_mon)">
+                <mat-radio-button [value]="0">None</mat-radio-button>
+                <mat-radio-button [value]="2">PFL</mat-radio-button>
+                <mat-radio-button [value]="3">AFL</mat-radio-button>
+              </mat-radio-group>
             </span>
           </mat-list-item>
           <mat-list-item style="width: 100%;">
             <span matListItemTitle>Pan: {{this.c4_pan}}</span>
             <span matListItemLine>
-              <mat-slider min="-1" max="1" step="0.01" class="pan-slider">
+              <mat-slider min="-100" max="100" step="1" class="pan-slider">
                 <input matSliderThumb [(ngModel)]="this.c4_pan" (valueChange)="this.setPan(3, this.c4_pan)">
               </mat-slider>
             </span>

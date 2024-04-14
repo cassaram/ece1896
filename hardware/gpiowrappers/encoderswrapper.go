@@ -73,14 +73,14 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.0.0.pan",
-				Data:   strconv.FormatFloat(oldVal-0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal-1, 10),
 			})
 		case 1:
 			oldVal := w.backend.GetConfig().CrosspointCfgs[0][0].Pan
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.0.0.pan",
-				Data:   strconv.FormatFloat(oldVal+0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal+1, 10),
 			})
 		}
 	}
@@ -91,14 +91,14 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.1.0.pan",
-				Data:   strconv.FormatFloat(oldVal-0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal-1, 10),
 			})
 		case 1:
 			oldVal := w.backend.GetConfig().CrosspointCfgs[1][0].Pan
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.1.0.pan",
-				Data:   strconv.FormatFloat(oldVal+0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal+1, 10),
 			})
 		}
 	}
@@ -109,14 +109,14 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.2.0.pan",
-				Data:   strconv.FormatFloat(oldVal-0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal-1, 10),
 			})
 		case 1:
 			oldVal := w.backend.GetConfig().CrosspointCfgs[2][0].Pan
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.2.0.pan",
-				Data:   strconv.FormatFloat(oldVal+0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal+1, 10),
 			})
 		}
 	}
@@ -127,14 +127,14 @@ func (w *EncodersWrapper) updateValues(portA byte, portB byte) {
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.3.0.pan",
-				Data:   strconv.FormatFloat(oldVal-0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal-1, 10),
 			})
 		case 1:
 			oldVal := w.backend.GetConfig().CrosspointCfgs[3][0].Pan
 			w.backend.Send(backend.Request{
 				Method: backend.SHOW_SET,
 				Path:   "crosspoint_cfgs.3.0.pan",
-				Data:   strconv.FormatFloat(oldVal+0.1, 'f', 1, 64),
+				Data:   strconv.FormatInt(oldVal+1, 10),
 			})
 		}
 	}

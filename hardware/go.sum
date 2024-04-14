@@ -1,5 +1,5 @@
-github.com/cassaram/ece1896/backend v0.0.0-20240413025622-2a633fe7b7e4 h1:wYeeSdAhfzbgC4lqy/FU8NL50VEg7WTpB/RSoSSLcws=
-github.com/cassaram/ece1896/backend v0.0.0-20240413025622-2a633fe7b7e4/go.mod h1:A52GfQKl9DfMb/rlqUcq1Y5i1TPHouPwY1xmZPYCKYo=
+github.com/cassaram/ece1896/backend v0.0.0-20240414034712-d26679cb77d9 h1:HgHQlEmHhxpSaXP8mthbzscJwdS3AVWlla1NWwFqWsY=
+github.com/cassaram/ece1896/backend v0.0.0-20240414034712-d26679cb77d9/go.mod h1:4IgoTQO/NqxKve/NqXuW5uNE3zxdsBh5xTrTt8ou2hI=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/jonboulle/clockwork v0.3.0 h1:9BSCMi8C+0qdApAp4auwX0RkLGUjs956h0EkuQymUhg=
