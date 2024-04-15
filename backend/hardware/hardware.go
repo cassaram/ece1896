@@ -17,7 +17,7 @@ type Hardware struct {
 	Logger     *log.Logger
 }
 
-func NewHardwareEQ(log *log.Logger) *Hardware {
+func NewHardware(log *log.Logger) *Hardware {
 	// Get I2C bus
 	bus, err := i2creg.Open("/dev/i2c-1")
 	if err != nil {

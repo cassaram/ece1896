@@ -23,6 +23,7 @@
       </mat-card-header>
       <mat-card-content>
         <mat-list>
+          <!--
           <mat-list-item style="height: fit-content;">
             <span matListItemTitle>Pre-Gain: {{this.preGain}} dB</span>
             <span matListItemLine style="height: fit-content;">
@@ -31,10 +32,11 @@
               </mat-slider>
             </span>
           </mat-list-item>
+          -->
           <mat-list-item style="height: fit-content;">
             <span matListItemTitle>Post-Gain: {{this.postGain}} dB</span>
             <span matListItemLine style="height: fit-content;">
-              <mat-slider min="-24" max="24" step="0.5" class="value-slider">
+              <mat-slider min="0" max="12" step="1" class="value-slider">
                 <input matSliderThumb [(ngModel)]="this.postGain" (valueChange)="this.updatePostGain(this.postGain)">
               </mat-slider>
             </span>

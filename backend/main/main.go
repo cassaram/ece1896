@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/cassaram/ece1896/backend/core"
+	"github.com/cassaram/ece1896/backend/hardware"
 )
 
 func main() {
@@ -27,8 +28,11 @@ func main() {
 	}
 	cfgPath := os.Getenv("CFG_PATH")
 
+	// Get hardware for I2C
+	hardware := hardware.NewHardware(l)
+
 	// Start program
-	c := core.NewCore(address, channels, busses, l, cfgPath)
+	c := core.NewCore(address, channels, busses, l, cfgPath, hardware)
 	go c.Run()
 
 	// Hold until close

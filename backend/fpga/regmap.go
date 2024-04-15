@@ -70,6 +70,16 @@ func dBuToVal(dbu float64) int64 {
 	return voltsToVal(volts)
 }
 
+func dBToCoefficient(dB float64) float64 {
+	if dB < 1 && dB > -1 {
+		return 0
+	}
+	if dB > 0 {
+		return (20 * math.Log10(dB)) * 10
+	}
+	return 100 - ((20 * math.Log10(dB)) * 100)
+}
+
 func int32ToInt24(val int32) []byte {
 	b := make([]byte, 3)
 	b[0] = byte(val >> 0)
@@ -92,7 +102,7 @@ func formatRatio(str string) []byte {
 
 func formatGain(str string) []byte {
 	valstr, _ := strconv.ParseFloat(str, 64) // Ignore error
-	val := int32(dBuToVal(valstr))
+	val := int32(dBToCoefficient(valstr))
 	return int32ToInt24(val)
 }
 
@@ -110,6 +120,6 @@ func formatPan(str string) []byte {
 
 func formatVolume(str string) []byte {
 	valstr, _ := strconv.ParseFloat(str, 64) // Ignore error
-	val := int32(dBuToVal(valstr))
+	val := int32(dBToCoefficient(valstr) + 0.5)
 	return int32ToInt24(val)
 }

@@ -18,6 +18,7 @@ import (
 	"github.com/antonholmquist/jason"
 	"github.com/cassaram/ece1896/backend/api"
 	"github.com/cassaram/ece1896/backend/config"
+	"github.com/cassaram/ece1896/backend/hardware"
 	"github.com/google/uuid"
 	"nhooyr.io/websocket"
 )
@@ -33,9 +34,10 @@ type Core struct {
 	httpServer    *http.Server
 	serveMux      http.ServeMux
 	cfgPath       string
+	hardware      *hardware.Hardware
 }
 
-func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger, cfgPath string) *Core {
+func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger, cfgPath string, hardware *hardware.Hardware) *Core {
 	// Find a valid config
 	c := Core{
 		//RunningConfig: *config.NewShowConfig("NewShow", "NewShow.cfg", channels, busses),
@@ -45,6 +47,7 @@ func NewCore(address string, channels uint64, busses uint64, logFile *log.Logger
 		rxChannel: make(chan api.Command),
 		clients:   make(map[uuid.UUID]*api.Client),
 		cfgPath:   cfgPath,
+		hardware:  hardware,
 	}
 
 	// Find latest config
@@ -203,6 +206,7 @@ func (c *Core) handleMessage(msg api.Command) {
 			}
 			break
 		}
+		c.hardware.UpdateFromPath(msg.RequestData.Path, c.RunningConfig)
 		c.notifyClients(api.Request{
 			Method: api.SHOW_SET,
 			Path:   msg.RequestData.Path,
@@ -230,6 +234,7 @@ func (c *Core) handleMessage(msg api.Command) {
 			}
 			break
 		}
+		c.hardware.WriteFullConfig(c.RunningConfig)
 		c.notifyClients(api.Request{
 			Method: api.SHOW_LOAD,
 			Path:   msg.RequestData.Path,
